@@ -1,0 +1,404 @@
+Toshkent sh.|Yakkasaroy|0101|YAKKASAROY|Bobur 22 (Tajmahal restorani ro'parasi)|Har kuni 24/7
+Toshkent sh.|Yakkasaroy|0129|YAKKASAROY 2|Shota Rustaveli 122|Du-Sha 09-18
+Toshkent sh.|Yakkasaroy|0130|QUSHBEGI|Qushbegi massivi, 2-uy (masjid ro'parasi)|Du-Sha 09-20, Ya 09-16
+Toshkent sh.|Yakkasaroy|0135|JANUBIY VOKZAL|Kichik halqa yo'li 22A (IBR zapravka)|Du-Sha 09-20
+Toshkent sh.|Yakkasaroy|0157|YAKKASAROY ASKIYA|Shota Rustaveli 55 (Askiya bozori ro'parasi)|Du-Sha 09-18
+Toshkent sh.|Uchtepa|0102|UCHTEPA|Lutfiy 2A (Shirin chorrahasi)|Har kuni 09-20
+Toshkent sh.|Uchtepa|0115|O'RIKZOR 1|O'rikzor bozori, 59-do'kon|Har kuni 09-18
+Toshkent sh.|Uchtepa|0124|FARHOD|Farhod Scopus Auto Mall, 215-do'kon|Chor dam, 09-18
+Toshkent sh.|Uchtepa|0138|O'RIKZOR 2|O'rikzor bozori, 42-2-do'kon|Har kuni 09-18
+Toshkent sh.|Uchtepa|0144|UCHTEPA 2|12-kvartal, 41 (EVOS yonida)|Du-Sha 24/7
+Toshkent sh.|Uchtepa|0150|FARHOD CHORRAHA|Farhod 6A (Havas yonida)|Du-Sha 09-18, Ya 09-16
+Toshkent sh.|Uchtepa|0170|ARCHA KO'CHA|14-mavze, 14-uy (SQB yonida)|Du-Sha 09-18
+Toshkent sh.|Uchtepa|0173|BESHQAYRAG'OCH|Beshqayrag'och 276|Du-Sha 09-18
+Toshkent sh.|Uchtepa|0179|DEPO MALL|Katta Qani 22 (Depo Mall)|Du-Sha 09-18
+Toshkent sh.|Uchtepa|01103|BESHQAYRAG'OCH 2|Manon Uyg'ur (Beshqayrag'och chorrahasi)|Du-Sha 09-18
+Toshkent sh.|Shayxontohur|0103|SHAYXONTOHUR|Furqat 6 (poliklinika yonida)|Har kuni 24/7
+Toshkent sh.|Shayxontohur|0121|MALIKA BOZOR|Ko'rgazma 36 (Mahmud kabob)|Dush dam, 09-18
+Toshkent sh.|Shayxontohur|0133|HUVAYDO|Huvaydo 14 (Onkologiya markazi)|Du-Sha 09-18, Ya 09-16
+Toshkent sh.|Shayxontohur|0148|IBN SINO|Yoqub Ziyoev 15 (Safiya)|Du-Sha 09-18
+Toshkent sh.|Shayxontohur|0165|HUVAYDO 2|Beruniy 12 (Eko bozor yonida)|Du-Sha 09-18
+Toshkent sh.|Shayxontohur|0181|GULOBOD|Uyg'ur 4 (Hotam moyka)|Du-Sha 09-18
+Toshkent sh.|Shayxontohur|0183|CHORSU KIYIM BOZOR|Saqichmon 1-38 (Chorsu bekati ro'parasi)|Dush dam, 09-18
+Toshkent sh.|Shayxontohur|0184|CHORSU GOLD SENTR|Chorsu, Gold Center 72-do'kon|Dush dam, 09-18
+Toshkent sh.|Shayxontohur|0186|TOSHMI CHORRAHA|Jar Ariq ko'chasi|Du-Sha 09-18
+Toshkent sh.|Shayxontohur|0192|SAMARQAND DARVOZA|Samarqand Darvoza 1|Du-Sha 09-18
+Toshkent sh.|Shayxontohur|0198|MALIKA BOZOR 2|Malika bozori 2, C-blok|Dush dam, 09-18
+Toshkent sh.|Olmazor|0106|OLMAZOR|Talabalar 81/1 (Kamolaxon)|Du-Sha 09-20, Ya 09-16
+Toshkent sh.|Olmazor|0131|ESKI SHAHAR|Langar 76A (Versal)|Du-Sha 09-18
+Toshkent sh.|Olmazor|0137|QORAQAMISH|Qoraqamish-2 (avtodrom)|Du-Sha 09-18, Ya 09-16
+Toshkent sh.|Olmazor|0151|KELES YO'LI|Keles yo'li (Safia yonida)|Du-Sha 09-18
+Toshkent sh.|Olmazor|0163|SEBZOR|Sebzor 1 (NBU yonida)|Du-Sha 09-18
+Toshkent sh.|Olmazor|0168|SAG'BON|Sag'bon 80 (Qo'shtut to'yxonasi)|Du-Sha 09-18
+Toshkent sh.|Olmazor|0185|QORAQAMISH A'LO|Qoraqamish 2/1, 8-uy|Du-Sha 09-18
+Toshkent sh.|Olmazor|01101|QORASAROY|Qorasaroy 2 (Olmazor city)|Du-Sha 09-18
+Toshkent sh.|Olmazor|01108|QORAQAMISH 1/4|Gulsaroy 7 (Andalusiya)|Du-Sha 09-18
+Toshkent sh.|Sergeli|0107|SERGELI|Sergeli 8A (Media Park ro'parasi)|Du-Sha 09-20, Ya 09-18
+Toshkent sh.|Sergeli|0123|SARALASH MARKAZI|Sog'diyona (8-issiqlik markazi yonida)|Du-Ju 09-18, Sha 09-16
+Toshkent sh.|Sergeli|0143|SERGELI 4-BEKAT|Shokir ariq 100|Du-Sha 09-20, Ya 09-18
+Toshkent sh.|Sergeli|0155|SERGELI MASHINA BOZORI|Sergeli mashina bozori, 26|Dush dam, 09-18
+Toshkent sh.|Yunusobod|0108|YUNUSOBOD (SHAHRISTON)|A. Temur 115A (Korzinka ro'parasi)|Du-Sha 09-18, Ya 09-16
+Toshkent sh.|Yunusobod|0111|UNIVERSAM YUNUSOBOD|Yunusobod 8, 22-uy (Billur)|Du-Sha 09-20, Ya 09-16
+Toshkent sh.|Yunusobod|0126|OLOY|Qashqar 1-22 (Oloy bozori ro'parasi)|Du-Sha 09-18
+Toshkent sh.|Yunusobod|0160|GIDROMETSENTR|Osiyo 21|Du-Sha 09-18
+Toshkent sh.|Yunusobod|0162|MEGA PLANET|11-mavze, 16-uy|Du-Sha 09-18
+Toshkent sh.|Yunusobod|0169|BODOMZOR|Bog'ishamol 33A (TATU yonida)|Du-Sha 09-18
+Toshkent sh.|Yunusobod|0187|SAMPI|ToshGRES 21|Du-Sha 09-18
+Toshkent sh.|Yunusobod|0188|TURKISTON METRO|Ahmad Donish 5|Du-Sha 09-18
+Toshkent sh.|Yunusobod|0190|YUNUSOBOD SAMARA|13-kvartal, 53-uy|Du-Sha 09-18
+Toshkent sh.|Mirobod|0109|MIROBOD|Afrosiyob 6 (Grand Trade)|Du-Sha 09-18
+Toshkent sh.|Mirobod|0136|SHIMOLIY VOKZAL|Oybek 59-1|Du-Sha 09-18, Ya 09-16
+Toshkent sh.|Mirobod|0159|YANGI QO'YLIQ|Qo'yliq 16B (Imperial yonida)|Du-Sha 09-18
+Toshkent sh.|Mirobod|0171|SARAKULKA|Mehrjon 45 (Dilkash)|Du-Sha 09-18
+Toshkent sh.|Mirobod|0195|RISOVIY|Farg'ona yo'li 41 (Risoviy bozor)|Du-Sha 09-18
+Toshkent sh.|Mirobod|01106|MIROBOD 2|Abdurauf Fitrat|Du-Sha 09-18
+Toshkent sh.|Mirzo Ulug'bek|0110|MAKSIM GORKIY|Buyuk Ipak Yo'li 123 (Sayohat)|Du-Sha 09-20, Ya 09-16
+Toshkent sh.|Mirzo Ulug'bek|0113|PARKENT|Parkent 11 (Parkent bozori ro'parasi)|Du-Sha 09-18, Ya 09-16
+Toshkent sh.|Mirzo Ulug'bek|0128|TTZ|Buyuk Ipak yo'li 481A (TTZ bozor)|Du-Sha 09-18
+Toshkent sh.|Mirzo Ulug'bek|0141|MIRZO ULUG'BEK|Katta Darxon 1/8|Du-Sha 09-18
+Toshkent sh.|Mirzo Ulug'bek|0164|CHIMGAN|Yalang'och 67|Du-Sha 09-18
+Toshkent sh.|Mirzo Ulug'bek|0176|IT-PARK|Mo'minova 7 (IT-Park)|Du-Sha 09-18
+Toshkent sh.|Mirzo Ulug'bek|01105|QORASUV 2|Qorasuv 2 (Qorasuv bozori)|Du-Sha 09-18
+Toshkent sh.|Yashnobod|0112|QO'YLIQ|Farg'ona yo'li 4 (Qo'yliq bozori ro'parasi)|Du-Sha 09-18, Ya 09-16
+Toshkent sh.|Yashnobod|0127|KADISHEVA|Beshariq 40|Du-Sha 09-18, Ya 09-16
+Toshkent sh.|Yashnobod|0145|MAHTUMQULI|Mahtumquli 117 (Korzinka Aviator)|Du-Sha 09-18
+Toshkent sh.|Yashnobod|0149|LISUNOVA|Qorasuv 117 (Korzinka)|Du-Sha 09-18
+Toshkent sh.|Yashnobod|0180|ROHAT|Ohangaron shossesi 105|Du-Sha 09-18
+Toshkent sh.|Chilonzor|0114|OQTEPA|Chilonzor 7, 33|Du-Sha 09-18, Ya 09-16
+Toshkent sh.|Chilonzor|0117|ABU SAXIY|Abu Saxiy bozori, E-blok|Dush dam, 09-18
+Toshkent sh.|Chilonzor|0120|BEK BARAKA|Bek Baraka bozori, 619-do'kon|Dush dam, 09-18
+Toshkent sh.|Chilonzor|0122|CHILONZOR|Chilonzor 1, 59|Du-Sha 09-20, Ya 09-16
+Toshkent sh.|Chilonzor|0132|CHO'PONOTA|Chilonzor 6, 44|Du-Sha 09-18, Ya 09-16
+Toshkent sh.|Chilonzor|0140|ALGORITM|Guliston 59-2|Du-Sha 09-18, Ya 09-16
+Toshkent sh.|Chilonzor|0152|CHILONZOR PARLAMENT|Al-Xorazmiy 17|Du-Sha 09-18
+Toshkent sh.|Chilonzor|0153|BEK BARAKA 2|Bek Baraka bozori, 770-do'kon|Dush dam, 09-18
+Toshkent sh.|Chilonzor|0154|DO'STLIK BOZOR|Do'stlik (Ippodrom) bozori|Dush dam, 09-18
+Toshkent sh.|Chilonzor|0156|ALGORITM 2|Sog'alli 25 (Safia ro'parasi)|Du-Sha 09-18
+Toshkent sh.|Chilonzor|0161|NOVZA|Bunyodkor 2A|Du-Sha 09-18
+Toshkent sh.|Chilonzor|0167|CHILONZOR METRO|16-mavze, 11-uy|Har kuni 24/7
+Toshkent sh.|Chilonzor|0175|ALFA SAVDO MARKAZI|Alfa savdo markazi|Har kuni 09-18
+Toshkent sh.|Chilonzor|0196|QO'QON BOZOR|Ippodrom, Qo'qon bozori|Dush dam, 09-18
+Toshkent sh.|Chilonzor|01102|QATORTOL|Qatortol 1-ko'cha|Du-Sha 09-20
+Toshkent sh.|Chilonzor|01107|BEK BARAKA 3|Bek Baraka bozori, 613-do'kon|Dush dam, 09-18
+Toshkent sh.|Yangihayot|0134|TASHKENT INDEX|Rayhon 107|Du-Sha 09-18
+Toshkent sh.|Yangihayot|0142|SPUTNIK|Do'stlik 2A (Shedevr ro'parasi)|Du-Sha 09-18
+Toshkent sh.|Yangihayot|0177|YANGI CHOSHTEPA|Uzar 8|Du-Sha 09-18
+Toshkent sh.|Yangihayot|0193|YANGI DARXON|Navro'z 52|Du-Sha 09-18
+Toshkent sh.|Bektemir|0178|BEKTEMIR|Bektemir 92|Du-Sha 09-18
+Toshkent sh.|Bektemir|0189|VODNIK|Vodnik 77|Du-Sha 09-18
+Toshkent vil.|Chirchiq|1002|CHIRCHIQ BOZOR|Alisher Navoiy (10-maktab)|Du-Sha 09-18, Ya 09-16
+Toshkent vil.|Chirchiq|1012|TROISKIY|Navoiy shoh 77V|Du-Sha 09-18
+Toshkent vil.|Chirchiq|1029|OKTYABR|Amir Temur 140/4|Du-Sha 09-18
+Toshkent vil.|Chirchiq|1031|CHIRCHIQ NAVOIY|A. Navoiy 200|Du-Sha 09-18
+Toshkent vil.|Chirchiq|1043|8-MIKRORAYON|10-mikrorayon 23|Du-Sha 09-18
+Toshkent vil.|Olmaliq|1003|OLMALIQ|Furqat 3-30|Du-Sha 09-18, Ya 09-16
+Toshkent vil.|Olmaliq|1027|OYDIN|Ulug'bek 82|Du-Sha 09-18
+Toshkent vil.|Angren|1004|ANGREN|Navoiy 111 (gul bozori)|Du-Sha 09-20, Ya 09-16
+Toshkent vil.|Angren|1038|6/4 ANGREN|Mustaqillik 223|Du-Sha 09-18
+Toshkent vil.|Oqqo'rg'on|1006|OQQO'RG'ON|Ohunboboyev 14 (Ishonch)|Du-Sha 09-18
+Toshkent vil.|Yangiyo'l|1007|YANGIYO'L|Yoshlik 54 (Dunyo mall)|Du-Sha 09-18, Ya 09-16
+Toshkent vil.|Yangiyo'l|1025|GULBAHOR|Sharof Rashidov 96|Du-Sha 09-18
+Toshkent vil.|Bekobod|1008|BEKOBOD|Buyuk ipak yo'li 466|Du-Sha 09-18, Ya 09-16
+Toshkent vil.|Bekobod|1030|14-MIKRORAYON|G'afur G'ulom 35/2|Du-Sha 09-18
+Toshkent vil.|Bekobod|1021|ZAFAR SHAHAR|Mustaqillik 13|Du-Sha 09-18
+Toshkent vil.|Ohangaron|1009|OHANGARON|A. Temur 10|Du-Sha 09-18
+Toshkent vil.|Nurafshon|1010|NURAFSHON|Toshkent yo'li 85|Du-Sha 09-18, Ya 09-16
+Toshkent vil.|Nurafshon|1036|NURAFSHON MIKRORAYON|Yuksalish 19|Du-Sha 09-18
+Toshkent vil.|Qibray|1011|QIBRAY|A. Navoiy (Makro ro'parasi)|Du-Sha 09-18, Ya 09-16
+Toshkent vil.|Qibray|1017|QIBRAY SELEKSIYA|Universitet 37|Du-Sha 09-18
+Toshkent vil.|Qibray|1035|DO'RMON|Yuzrobot 214|Du-Sha 09-18
+Toshkent vil.|Qibray|1039|UCHHO'Z|Milliy bog' 4A|Du-Sha 09-18
+Toshkent vil.|Qibray|1041|UCH QAHRAMON BOZOR|Uch qahramon bozori|Dush dam, 09-18
+Toshkent vil.|Parkent|1013|PARKENT TUMAN|Mustaqillik (Parkent bozori)|Du-Sha 09-18
+Toshkent vil.|G'azalkent|1014|G'AZALKENT|O'zgarish 2/12|Du-Sha 09-18, Ya 09-16
+Toshkent vil.|G'azalkent|1034|QORONG'U BOZOR|Mustaqillik 18A|Du-Sha 09-18
+Toshkent vil.|Zangiota|1015|ZANGIOTA|H. No'monov 1 (Eshonguzar)|Du-Sha 09-18
+Toshkent vil.|Zangiota|1022|NAZARBEK|Oq uy 91|Du-Sha 09-18
+Toshkent vil.|Zangiota|1040|SOLNECHNIY BOZOR 2|Solnechniy bozori|Dush dam, 09-18
+Toshkent vil.|Toshkent tumani|1016|KELES|Keles yo'li 179|Du-Sha 09-18
+Toshkent vil.|Toshkent tumani|1024|KO'KSAROY|Ko'ksaroy MFY|Du-Sha 09-18
+Toshkent vil.|Yuqori Chirchiq|1018|YANGIBOZOR|Yuqori Chirchiq, Yangibozor|Du-Sha 09-18
+Toshkent vil.|Yuqori Chirchiq|1026|BARDANKO'L|Mirobod 4/2|Du-Sha 09-18
+Toshkent vil.|Piskent|1019|PISKENT|Mitan MFY, Bobur|Du-Sha 09-18, Ya 09-16
+Toshkent vil.|Bo'ka|1023|BO'KA|Magistral ko'chasi|Du-Sha 09-18
+Toshkent vil.|Chinoz|1028|CHINOZ|Samarqand 141|Du-Sha 09-18
+Toshkent vil.|Bo'stonliq|1032|XO'JAKENT|Nurchilar 70|Du-Sha 09-18
+Toshkent vil.|O'rta Chirchiq|1033|QORASUV|Toshkent yo'li 270|Du-Sha 09-18
+Toshkent vil.|Quyi Chirchiq|1042|QUYI CHIRCHIQ|Muhammadqulova 18B|Du-Sha 09-18
+Sirdaryo|Baxt|2002|BAXT|Ulug'yo'l 159|Du-Sha 09-18
+Sirdaryo|Sirdaryo tumani|2013|SIRDARYO|O'zbekiston 198|Du-Sha 09-18
+Sirdaryo|Guliston|2003|GULISTON|O'zbekiston 3-17 (Anorbank ro'parasi)|Har kuni 09-21
+Sirdaryo|Guliston|2009|GULISTON VOKZAL|Sayhun 3A|Har kuni 09-21
+Sirdaryo|Guliston|2014|GULISTON ASR|Asr ko'chasi|Du-Sha 09-18
+Sirdaryo|Guliston|2011|GULISTON TUMAN|Turkiston 83|Du-Sha 09-18
+Sirdaryo|Yangiyer|2004|YANGIYER|Gulshan ko'chasi|Du-Sha 09-18
+Sirdaryo|Xovos|2005|XOVOS|Samarqand ko'chasi|Du-Sha 09-18
+Sirdaryo|Boyovut|2006|BOYOVUT|Madaniyat Tinchlik 60|Du-Sha 09-20
+Sirdaryo|Shirin|2007|SHIRIN|Ibn Sino 1|Du-Sha 09-20
+Sirdaryo|Oqoltin|2008|OQOLTIN|Tinchlik 37|Du-Sha 09-18
+Sirdaryo|Sayxunobod|2010|SAYXUNOBOD|A. Navoiy 19|Du-Sha 09-18
+Sirdaryo|Sardoba|2012|SARDOBA|Do'stlik (avtovokzal)|Du-Sha 09-18
+Jizzax|Jizzax shahri|2502|JIZZAX|Sh. Rashidov 303|Du-Sha 08-20, Ya 08-16
+Jizzax|Jizzax shahri|2507|OROM|Mustaqillik 31|Du-Sha 09-18
+Jizzax|Jizzax shahri|2516|JIZZAX MIKRORAYON|32-kvartal, 58-uy (New Carnival Mall)|Du-Sha 09-18
+Jizzax|Zomin|2503|ZOMIN|Mustaqillik 75|Du-Sha 09-20
+Jizzax|Zomin|2517|DASHTOBOD|Dashtobod, 61-uy|Du-Sha 09-18
+Jizzax|Sharof Rashidov|2504|STANSIYA JIZZAX|A. Navoiy 15|Du-Sha 09-20
+Jizzax|G'allaorol|2505|G'ALLAOROL|Mustaqillik 13|Du-Sha 09-18
+Jizzax|Paxtakor|2506|PAXTAKOR|Oltinko'l MFY 89|Du-Sha 09-18
+Jizzax|Do'stlik|2508|DO'STLIK|Sariskov 7|Du-Sha 09-18
+Jizzax|Mirzacho'l|2509|MIRZACHO'L|Iqbol K-1|Du-Sha 09-18
+Jizzax|Zarbdor|2510|ZARBDOR|Lalmikor A376|Du-Sha 09-18
+Jizzax|Baxmal|2511|BAXMAL|Mustaqillik 47|Du-Sha 09-18
+Jizzax|Forish|2512|FORISH|Fayziobod ko'chasi|Du-Sha 09-18
+Jizzax|Yangiobod|2513|YANGIOBOD|Mustaqillik 12|Du-Sha 09-18
+Jizzax|Zafarobod|2514|ZAFAROBOD|Mustaqillik 2|Du-Sha 09-18
+Jizzax|Arnasoy|2515|ARNASOY|Alpomish 3|Du-Sha 09-18
+Samarqand|Samarqand shahri|3001|M BARAKA SAM|Mirsaid Baraka 8|Du-Sha 08-22, Ya 09-18
+Samarqand|Samarqand shahri|3002|SAG'DIYONA|Abu Bakr Roziy (39-maktab ro'parasi)|Du-Sha 08-22, Ya 09-18
+Samarqand|Samarqand shahri|3016|SIYOB|Rudakiy 277 (Kohinur Plaza)|Du-Sha 09-18
+Samarqand|Samarqand shahri|3023|ULUG'BEK|Toshkent tract 55A|Du-Sha 09-18
+Samarqand|Samarqand shahri|3028|SAMARQAND|Abu Rayhon 196|Du-Sha 09-22
+Samarqand|Samarqand shahri|3043|YANGIBOZOR|U. Jo'raqulov (Yangi bozor)|Dush dam, 09-18
+Samarqand|Samarqand shahri|3045|FIRDAVSIY|Gagarin 155|Du-Sha 09-18
+Samarqand|Samarqand shahri|3050|SATTEPO|Turkiston 145D|Du-Sha 09-18
+Samarqand|Samarqand shahri|3051|MOTRID QORASUV|Qorasuv 159 (Afruza)|Du-Sha 09-18
+Samarqand|Samarqand tumani|3014|SELSKIY SAM|Usmon Yusupov 137|Du-Sha 09-18
+Samarqand|Samarqand tumani|3019|SAMARQAND CITY|U. Jo'raqulov 205|Du-Sha 09-20
+Samarqand|Samarqand tumani|3027|OQMASJID|Toshkent 100|Du-Sha 09-18
+Samarqand|Samarqand tumani|3038|SUPER|Narpay (Dilshod ro'parasi)|Du-Sha 09-18
+Samarqand|Samarqand tumani|3039|EHTIYOT QISMLARI BOZORI|Ehtiyot qismlar bozori|Du-Sha 09-18
+Samarqand|Oqdaryo|3005|OQDARYO|A. Temur 60|Du-Sha 09-18
+Samarqand|Kattaqo'rg'on|3006|KATTAQO'RG'ON|Qoradaryo 7D|Du-Sha 09-20
+Samarqand|Kattaqo'rg'on|3046|NURXON|A. Navoiy 105|Du-Sha 09-18
+Samarqand|Kattaqo'rg'on|3024|PAYSHANBA|A. Navoiy ko'chasi|Du-Sha 09-18
+Samarqand|Kattaqo'rg'on|3040|KADAN|Alisher Navoiy ko'chasi|Du-Sha 09-18
+Samarqand|Urgut|3010|URGUT|Navoiyshox|Du-Sha 09-20
+Samarqand|Urgut|3026|URGUT YANGIBOZOR|Amir Temur ko'chasi|Du-Sha 09-18
+Samarqand|Urgut|3049|URGUT YANGI BOZOR ICHI|Yangi bozor, 18-sektor|Pay dam, 09-18
+Samarqand|Payariq|3011|CHELAK|U. Yusupova|Du-Sha 09-20
+Samarqand|Payariq|3037|NARIMON|Istiqbol 2|Du-Sha 09-18
+Samarqand|Jomboy|3012|JOMBOY|Samarqand 19|Du-Sha 09-18
+Samarqand|Jomboy|3025|JOMBOY SENTR|Toshkent 150|Du-Sha 09-18
+Samarqand|Jomboy|3036|FARXOD SHAHARCHA|Farxod shaharchasi, 3A|Du-Sha 09-18
+Samarqand|Pastdarg'om|3015|JUMA|Amir Temur 32|Du-Sha 09-19
+Samarqand|Pastdarg'om|3035|CHARXIN|Mirzo Ulug'bek 2|Du-Sha 09-18
+Samarqand|Pastdarg'om|3052|BUYUM BOZOR|Yangi bozor 111|Dush dam, 09-18
+Samarqand|Toyloq|3017|TOYLOQ|Bog'ichinor 2|Du-Sha 09-18
+Samarqand|Toyloq|3048|BITONKA KRUG|Halqa yo'li 1|Du-Sha 09-18
+Samarqand|Narpay|3018|NARPAY|Salovat MFY 2|Du-Sha 09-18
+Samarqand|Narpay|3047|OQTOSH|Ismoil Buxoriy ko'chasi|Du-Sha 09-18
+Samarqand|Nurobod|3020|NUROBOD|Amir Temur 4|Du-Sha 09-18
+Samarqand|Ishtixon|3021|ISHTIXON|Mustaqillik 23|Du-Sha 09-20
+Samarqand|Ishtixon|3041|MITAN|A. Temur 3|Du-Sha 09-18
+Samarqand|Bulung'ur|3022|BULUNG'UR|O'zbekiston 1|Du-Sha 09-18
+Samarqand|Paxtachi|3029|PAXTACHI|Ziyovuddin shaharchasi|Du-Sha 09-18
+Samarqand|Qo'shrabot|3030|QO'SHRABOT|Bobur 10|Du-Sha 09-18
+Farg'ona|Farg'ona shahri|4001|FARG'ONA|Yuksalish 28|Du-Ju 08-22, Sha 08-20, Ya 08-18
+Farg'ona|Farg'ona shahri|4015|FARG'ONA PVZ|S. Temur 227A|Du-Sha 09-18, Ya 09-16
+Farg'ona|Farg'ona shahri|4026|TSUM|Mustaqillik 50|Du-Sha 09-18, Ya 09-16
+Farg'ona|Farg'ona shahri|4031|QIRGULI|Marg'ilon 11|Du-Sha 09-18
+Farg'ona|Qo'qon|4002|QO'QON (CAVUM)|Alisher Navoiy 64|Du-Sha 09-21, Ya 09-16
+Farg'ona|Qo'qon|4011|QO'QON|Turkiston 220|Du-Sha 08-22, Ya 08-18
+Farg'ona|Qo'qon|4029|QO'QON YANGIBOZOR|Usmon Nosir 68|Dush dam, 09-19
+Farg'ona|Marg'ilon|4005|MARG'ILON|Mustaqillik 439|Du-Ju 09-20, Sha 09-18, Ya 09-16
+Farg'ona|Marg'ilon|4041|O'RAM|Mustaqillik 174|Du-Sha 09-18
+Farg'ona|Toshloq|4008|TOSHLOQ|Dovon 53|Du-Sha 09-18
+Farg'ona|Beshariq|4009|BESHARIQ|Oltin Vodiy 190|Du-Ju 09-18, Sha 09-16
+Farg'ona|Beshariq|4035|BESHARIQ PEREEZD|Oltin Vodiy 41|Du-Sha 09-18
+Farg'ona|O'zbekiston|4012|O'ZBEKISTON|Turkiston ko'chasi (Uzum yonida)|Du-Sha 09-18
+Farg'ona|O'zbekiston|4036|AVG'ONBOG'|Avg'onbog' MFY|Du-Sha 09-18
+Farg'ona|Oltiariq|4013|OLTIARIQ|Chinor tagi 2|Du-Sha 09-18
+Farg'ona|Oltiariq|4037|XAMZA|Obod mahallasi 1|Du-Sha 09-18
+Farg'ona|Quva|4014|QUVA|O'zbek 41|Du-Sha 09-18
+Farg'ona|Quva|4038|QUVA MARKAZ|Muruvvat ko'chasi|Du-Sha 09-18
+Farg'ona|Qo'shtepa|4016|QO'SHTEPA|Mustaqillik 76A|Du-Sha 09-18
+Farg'ona|Bog'dod|4017|BOG'DOD|Olmos 115|Du-Sha 09-18
+Farg'ona|Bog'dod|4033|BOG'DOD SENTR|Orzu 8|Du-Sha 09-18
+Farg'ona|Rishton|4018|RISHTON|Farg'ona 9|Du-Sha 09-18
+Farg'ona|Uchko'prik|4020|UCHKO'PRIK|Navro'zshoh ko'chasi|Du-Sha 09-18
+Farg'ona|Uchko'prik|4028|YANGIBOZOR (SALANG)|Salang ko'chasi|Du-Sha 09-18
+Farg'ona|Buvayda|4021|BUVAYDA|Yangiqo'rg'on aylanasi|Du-Sha 09-18
+Farg'ona|Buvayda|4032|BUVAYDA 2|Guzar 7|Du-Sha 09-18
+Farg'ona|Furqat|4022|FURQAT|Mustaqillik 18|Du-Sha 09-18
+Farg'ona|Quvasoy|4023|QUVASOY|A. Navoiy 115|Du-Sha 09-18
+Farg'ona|Quvasoy|4039|QUVASOY YO'LI|Quvasoy 35A|Du-Sha 09-18
+Farg'ona|Dang'ara|4024|DANG'ARA|Sanoat 1|Du-Sha 09-18
+Farg'ona|Yozyovon|4025|YOZYOVON|Al-Farg'oniy ko'chasi|Du-Sha 09-18
+Farg'ona|So'x|4040|SO'X|Amir Temur 67A|Du-Sha 09-18
+Namangan|Namangan shahri|5009|NAMANGAN|6-mikrorayon, G'alaba 2|Du-Sha 09-22, Ya 09-20
+Namangan|Namangan shahri|5014|NAMANGAN LOLA|6-mkr, G'alaba 2|Du-Ju 09-20, Sha 09-18, Ya 09-16
+Namangan|Namangan shahri|5017|SARDOBA NAMANGAN|A. Navoiy 10|Du-Ju 09-20, Sha 09-18, Ya 09-16
+Namangan|Namangan shahri|5021|CHORSU|Uychi 2 (Chorsu mehmonxonasi)|Du-Ju 09-18, Sha 09-16
+Namangan|Namangan shahri|5028|GO'ZAL|Shimoliy aylanma yo'l 2B|Du-Sha 09-18
+Namangan|Chust|5010|CHUST|Ipak yo'li 7|Du-Sha 09-18
+Namangan|Chust|5027|OLMOS|Mustaqillik, Bozorboshi MFY|Du-Sha 09-18
+Namangan|Uchqo'rg'on|5011|UCHQO'RG'ON|Do'stlik ko'chasi|Du-Sha 09-18
+Namangan|Uchqo'rg'on|5024|QO'G'AY|Madaniyat 27A|Du-Sha 09-18
+Namangan|Uychi|5012|UYCHI|Beruniy 213|Du-Sha 09-18
+Namangan|Mingbuloq|5013|MINGBULOQ|Mingbuloq IIB|Du-Sha 09-18
+Namangan|Yangiqo'rg'on|5015|YANGIQO'RG'ON|Chortoq 11|Du-Sha 09-18
+Namangan|Chortoq|5016|CHORTOQ|Namangan 4|Du-Sha 09-18
+Namangan|Pop|5018|POP|Shabboda 27|Du-Sha 09-18
+Namangan|Norin|5019|NORIN|Beruniy 20|Du-Sha 09-18
+Namangan|Norin|5022|NORINKAPA|Soy Bo'yi MFY|Du-Sha 09-18
+Namangan|Namangan tumani|5020|NAMANGAN TUMAN|Nurafshon 50|Du-Sha 09-18
+Namangan|Namangan tumani|5025|YUKSALISH|Davlatobod, Yoshlar 34/1|Du-Sha 09-18
+Namangan|To'raqo'rg'on|5007|TO'RAQO'RG'ON|Al-Farg'oniy 56A|Du-Sha 09-18
+Namangan|To'raqo'rg'on|5023|TO'RAQO'RG'ON 2|Kosonsoy ko'chasi|Du-Sha 09-18
+Namangan|Kosonsoy|5008|KOSONSOY|Gulobod ko'chasi|Du-Sha 09-18
+Namangan|Kosonsoy|5026|CHINDOVUL|Uzunqishloq MFY, Qilish 24|Har kuni 09-18
+Andijon|Andijon shahri|6001|AVTOVOKZAL|Amir Temur 13|Du-Sha 08-20, Ya 08-16
+Andijon|Andijon shahri|6006|ESKI SHAHAR|Mustaqillik shoh 8|Du-Sha 09-20, Ya 09-16
+Andijon|Andijon shahri|6011|1-MIKRORAYON|1-mikrorayon 8|Du-Sha 09-18
+Andijon|Andijon shahri|6017|2-MIKRORAYON|Nodira 1B|Du-Sha 09-18
+Andijon|Andijon shahri|6034|3-MIKRORAYON|Bobur 2A|Du-Sha 09-18
+Andijon|Izboskan|6005|POYTUG'|Naqshband 5|Du-Sha 09-18
+Andijon|Izboskan|6028|CHUVAMA|To'pchinor 10|Du-Sha 09-18
+Andijon|Paxtaobod|6007|PAXTAOBOD|Amir Habibiy 70|Du-Sha 09-18
+Andijon|Paxtaobod|6027|MADANIYAT|Maybog'cha 2|Du-Sha 09-18
+Andijon|Asaka|6008|ASAKA|Umid 41|Du-Sha 09-18, Ya 09-16
+Andijon|Asaka|6022|ASAKA DEU|Humo 2|Du-Sha 09-18
+Andijon|Shahrixon|6009|SHAHRIXON|Hamza 1|Du-Sha 09-18
+Andijon|Shahrixon|6025|SHAHRIXON 2|Chinobod 7|Du-Sha 09-18
+Andijon|Marhamat|6012|MARHAMAT|Boburshoh 45|Du-Sha 09-18
+Andijon|Marhamat|6031|POLVONTOSH|Bobur ko'chasi|Du-Sha 09-18
+Andijon|Xo'jaobod|6013|XO'JAOBOD|Uzun ko'cha|Du-Sha 09-18
+Andijon|Andijon tumani|6014|ANDIJON TUMANI|Nayman 17|Du-Sha 09-18
+Andijon|Andijon tumani|6032|KAMOLOT|Sayfiobod 15|Du-Sha 09-18
+Andijon|Andijon tumani|6033|KUYGANYOR|Vodiy 187|Du-Sha 09-18
+Andijon|Andijon tumani|6035|TELEVIZIONNIY|Televizionniy 30|Du-Sha 09-18
+Andijon|Buloqboshi|6015|BULOQBOSHI|M. Ismoiliy 63|Du-Sha 09-18
+Andijon|Qo'rg'ontepa|6016|QO'RG'ONTEPA|Mustaqillik 285|Du-Sha 09-18
+Andijon|Qo'rg'ontepa|6030|QORASUV|O'qituvchilar 2|Du-Sha 09-18
+Andijon|Baliqchi|6018|BALIQCHI|Boburshoh 67|Du-Sha 09-18
+Andijon|Baliqchi|6024|CHINOBOD|Namunaviy 134|Du-Sha 09-18
+Andijon|Jalaquduq|6019|JALAQUDUQ|Dilxush 19|Du-Sha 09-18
+Andijon|Jalaquduq|6029|OYIM|Qo'chqor Turdiyev 4|Du-Sha 09-18
+Andijon|Oltinko'l|6020|OLTINKO'L|Markaz 53|Du-Sha 09-18
+Andijon|Xonobod|6021|XONOBOD|Obod 26|Du-Sha 09-18
+Andijon|Bo'z|6023|BO'Z|Akmal Ikromov 2|Du-Sha 09-18
+Andijon|Ulug'nor|6026|ULUG'NOR|Shahriobod 20|Du-Sha 09-18
+Qashqadaryo|Qarshi shahri|7001|QARSHI|Shohbekat 1A|Du-Sha 08-01, Ya 09-18
+Qashqadaryo|Qarshi shahri|7005|QARSHI YANGIBOZOR|Qarlibog'ot 1-202|Dush dam, 09-18
+Qashqadaryo|Qarshi shahri|7028|PEDINSTITUT|Amir Temur 110|Du-Sha 09-18
+Qashqadaryo|Qarshi shahri|7029|ESKI SHAHAR|Islom Karimov 347|Du-Sha 09-18
+Qashqadaryo|Qarshi shahri|7032|QARSHI 4-MKR|4-mikrorayon, 2-bino|Du-Sha 09-18
+Qashqadaryo|Qarshi tumani|7009|BESHKENT|Mustaqillik 41|Du-Ju 09-18, Sha 09-16
+Qashqadaryo|Shahrisabz|7003|SHAHRISABZ|Ipak yo'li 360|Du-Sha 09-18
+Qashqadaryo|Shahrisabz|7017|TOJMAHAL|Ipak yo'li 278|Du-Sha 09-18
+Qashqadaryo|Shahrisabz|7015|CHORSHANBE|Zilol 1|Du-Sha 09-18
+Qashqadaryo|Chiroqchi|7006|CHIROQCHI|Mustaqillik ko'chasi|Du-Ju 09-18, Sha 09-16
+Qashqadaryo|Kitob|7007|KITOB|Jo'rayev 21|Du-Ju 09-18, Sha 09-16
+Qashqadaryo|Muborak|7008|MUBORAK|Begzod 4|Du-Ju 09-18, Sha 09-16
+Qashqadaryo|G'uzor|7011|G'UZOR|O'zbekiston 57|Du-Sha 09-18
+Qashqadaryo|Koson|7012|KOSON|Mustaqillik 15|Du-Sha 09-18
+Qashqadaryo|Yakkabog'|7014|YAKKABOG'|Amir Temur 25|Du-Sha 09-18
+Qashqadaryo|Yakkabog'|7023|ECO BOZOR|Aygirko'l 212|Du-Sha 09-18
+Qashqadaryo|Qamashi|7016|QAMASHI|Amir Temur ko'chasi|Du-Sha 09-18
+Qashqadaryo|Ko'kdala|7018|KO'KDALA|Erkin Vohidov 38|Du-Sha 09-18
+Qashqadaryo|Dehqonobod|7019|DEHQONOBOD|Guliston 40|Du-Sha 09-18
+Qashqadaryo|Kasbi|7025|KASBI|Mug'lon, 3-mikrorayon 5|Du-Sha 09-18
+Qashqadaryo|Nishon|7031|NISHON|Mustaqillik ko'chasi|Du-Sha 09-18
+Surxondaryo|Termiz shahri|7501|TERMIZ|Alisher Navoiy 21/31|Du-Ju 08-20, Sha 08-18, Ya 08-16
+Surxondaryo|Termiz shahri|7508|TERMIZ SENTR|Karpov bozori|Du-Sha 09-18, Ya 09-16
+Surxondaryo|Termiz shahri|7515|TERMIZ VOKZAL|Ibn Sino 29|Du-Sha 09-18
+Surxondaryo|Termiz tumani|7520|UCHQIZIL|Birdamlik 19|Du-Sha 09-18
+Surxondaryo|Denov|7502|DENOV|Sharof Rashidov 176|Du-Sha 09-18, Ya 09-16
+Surxondaryo|Denov|7516|DENOV 2|Qo'shchinor 1|Du-Sha 09-18
+Surxondaryo|Jarqo'rg'on|7503|JARQO'RG'ON|O'zbekiston 12|Du-Sha 09-18, Ya 09-16
+Surxondaryo|Jarqo'rg'on|7514|SURXON|Muqimiy 1|Du-Sha 09-18
+Surxondaryo|Angor|7504|ANGOR|Termiziy ko'chasi|Du-Sha 09-18, Ya 09-16
+Surxondaryo|Angor|7518|BARAKA SAVDO KOMPLEKSI|Angor savdo markazi 78A|Du-Sha 09-18
+Surxondaryo|Qumqo'rg'on|7505|QUMQO'RG'ON|A. Navoiy 19A|Du-Sha 09-18, Ya 09-16
+Surxondaryo|Sherobod|7506|SHEROBOD|Mustaqillik ko'chasi|Du-Sha 09-18, Ya 09-16
+Surxondaryo|Sho'rchi|7507|SHO'RCHI|Amir Temur 53-B|Du-Sha 09-18
+Surxondaryo|Sariosiyo|7509|SARIOSIYO|Mirzo Ulug'bek ko'chasi|Du-Sha 09-18, Ya 09-16
+Surxondaryo|Qiziriq|7510|QIZIRIQ|Barhayot ko'chasi|Du-Sha 09-18
+Surxondaryo|Boysun|7511|BOYSUN|Istiqlol 9|Du-Sha 09-18
+Surxondaryo|Uzun|7512|UZUN|Yoshlik ko'chasi|Du-Sha 09-18, Ya 09-16
+Surxondaryo|Oltinsoy|7513|OLTINSOY|Oltindala 10|Du-Sha 09-18
+Surxondaryo|Muzrabot|7517|MUZRABOT|A. Temur 22|Du-Sha 09-18
+Surxondaryo|Bandixon|7519|BANDIXON|Alisher Navoiy ko'chasi|Du-Sha 09-18
+Buxoro|Buxoro shahri|8001|BUXORO|Bahouddin Naqshband 309/1|Du-Sha 08-21, Ya 09-16
+Buxoro|Buxoro shahri|8003|BUXORO 5-MKR|A. Somiy 6A-17|Du-Sha 09-19
+Buxoro|Buxoro shahri|8005|GORGAZ|Mustaqillik 33|Du-Sha 09-19
+Buxoro|Buxoro shahri|8008|BUXORO VOKZAL|O. Eshonov 10|Du-Sha 09-19
+Buxoro|Buxoro shahri|8018|RAYMAG|S. Murodov 90|Du-Sha 09-19
+Buxoro|Buxoro shahri|8020|CHINAR MALL|Alpomish 203|Du-Sha 09-18
+Buxoro|Buxoro shahri|8025|FAYZOBOD|Bog'ishamol 31A|Du-Sha 09-18
+Buxoro|Buxoro shahri|8026|DILKUSHO|Dilkusho 268|Du-Sha 09-18
+Buxoro|Buxoro shahri|8029|KRITIY|I. Mo'minov 24|Du-Sha 09-18
+Buxoro|Buxoro shahri|8030|MELODIYA|I. Karimov ko'chasi|Du-Sha 09-18
+Buxoro|Buxoro shahri|8036|SAMARQAND DARVOZA|Yoshlik 12-1|Du-Sha 09-18
+Buxoro|Kogon|8007|KOGON|Mahmud Torobiy 49|Du-Sha 09-21, Ya 09-19
+Buxoro|Kogon|8013|KOGON VOKZAL|Mahmud Torobiy 49|Du-Sha 09-18
+Buxoro|Kogon|8028|YANGI HAYOT|Amir Temur 63|Du-Sha 09-18
+Buxoro|Vobkent|8009|VOBKENT|Al-Buxoriy ko'chasi|Du-Sha 09-18
+Buxoro|G'ijduvon|8010|G'IJDUVON|Yusuf Hamadoniy 74|Du-Sha 09-18, Ya 09-16
+Buxoro|G'ijduvon|8023|G'IJDUVON 2|Ulug'bek 130|Du-Sha 09-18
+Buxoro|G'ijduvon|8033|IPPODROM|Yusuf Hamadoniy (Ippodrom bozori)|Dush dam, 09-18
+Buxoro|Buxoro tumani|8011|GALAOSIYO|Toshmachit 2A|Du-Sha 09-18
+Buxoro|Buxoro tumani|8024|MADANIYAT|M. Karimov ko'chasi|Du-Sha 09-18
+Buxoro|Jondor|8012|JONDOR|Mahmud Torobiy 209|Du-Sha 09-18
+Buxoro|Jondor|8027|JONDOR 2|Navgedi 1|Du-Sha 09-18
+Buxoro|Peshku|8014|PESHKU|Yangi bozor 2|Du-Sha 09-18
+Buxoro|Peshku|8031|PESHKU 2|O'g'lon ko'chasi|Du-Sha 09-18
+Buxoro|Qorako'l|8015|QORAKO'L|Ulug'bek 48|Du-Ju 09-19, Sha 09-18
+Buxoro|Qorovulbozor|8021|QOROVULBOZOR|Navoiy 12|Du-Sha 09-18
+Buxoro|Shofirkon|8017|SHOFIRKON|Mustaqillik ko'chasi|Du-Sha 09-18, Ya 09-16
+Buxoro|Romitan|8019|ROMITAN|Nurafshon 259|Du-Sha 09-18
+Buxoro|Romitan|8035|GAZLI|A. Temur 40|Du-Sha 09-18
+Buxoro|Olot|8022|OLOT|Olot 13|Du-Sha 09-18
+Navoiy|Navoiy shahri|8508|NAVOIY|I. Karimov 120A|Du-Ju 08-21, Sha 08-18, Ya 08-16
+Navoiy|Navoiy shahri|8509|VOSXOD|Energetik 1|Du-Sha 09-18, Ya 09-16
+Navoiy|Navoiy shahri|8517|NAVOIY YANGIBOZOR|Yangibozor|Du-Sha 09-19
+Navoiy|Navoiy shahri|8522|SHODLIK|Shodlik 1|Du-Sha 09-18
+Navoiy|Navoiy shahri|8523|NAVOIY MIB|Mahmud Torobiy 116|Du-Sha 09-18
+Navoiy|Qiziltepa|8511|QIZILTEPA|Sozlab Ol savdo markazi|Du-Sha 09-18
+Navoiy|Qiziltepa|8518|VANG'OZI|Vang'ozi ko'chasi|Du-Sha 09-18
+Navoiy|Qiziltepa|8525|TOSHRABOT|Toshrabot (Lazzat bozori)|Du-Sha 09-18
+Navoiy|Navbahor|8512|NAVBAHOR|Beshrabot markazi|Du-Sha 09-18
+Navoiy|Zarafshon|8513|ZARAFSHON|3-mikrorayon (Uzum ro'parasi)|Du-Sha 09-18
+Navoiy|Zarafshon|8520|13-MIKRORAYON|13-mikrorayon, 77-uy|Du-Sha 09-18
+Navoiy|Nurota|8514|NUROTA|U. Yusupova 69|Du-Sha 09-18
+Navoiy|Nurota|8519|G'OZG'ON|Mustaqillik 65|Du-Sha 09-18
+Navoiy|Xatirchi|8515|XATIRCHI|Eko-bozor ichida|Du-Sha 09-18
+Navoiy|Xatirchi|8526|LENIN CHORRAHA|Tamabaxrin MFY 99|Du-Sha 09-18
+Navoiy|Uchquduq|8516|UCHQUDUQ|A. Temur 37-B|Du-Sha 09-18
+Navoiy|Konimex|8521|KONIMEX|Ibn Sino ko'chasi|Du-Sha 09-18
+Navoiy|Konimex|8524|ZAFAROBOD QO'RG'ONI|Konchilar ko'chasi|Du-Sha 09-18
+Navoiy|Karmana|8527|KARMANA|Kulollar 8|Du-Sha 09-18
+Xorazm|Urganch shahri|9001|URGANCH|Al-Xorazmiy 62|Du-Ju 08-20, Sha 08-18, Ya 08-16
+Xorazm|Urganch shahri|9003|URGANCH 4-MKR|Zarvuloq 1, 26-uy|Du-Sha 09-18
+Xorazm|Urganch shahri|9016|YANGI TUNEL|Yog'du 12A|Du-Sha 09-18
+Xorazm|Urganch tumani|9015|RAYSENTR|Mustaqillik 28|Du-Sha 09-18
+Xorazm|Xiva|9002|XIVA|Yangi Hayot, A. Temur|Du-Ju 08-20, Sha 09-18, Ya 09-16
+Xorazm|Xiva|9013|XIVA STADION|Feruz 98|Du-Sha 09-18
+Xorazm|Tuproqqal'a|9004|TUPROQQAL'A|Ogahiy 3-18|Du-Sha 09-18
+Xorazm|Xonqa|9005|XONQA|Mustaqillik 5|Du-Sha 09-18
+Xorazm|Xonqa|9018|OLAJA|Olaja qishlog'i|Du-Sha 09-18
+Xorazm|Gurlan|9006|GURLAN|Mustaqillik 12A|Du-Sha 09-18
+Xorazm|Hazorasp|9007|HAZORASP|Oftob 107|Du-Sha 09-18
+Xorazm|Hazorasp|9014|HAZORASP MARKAZ|Navoiy ko'chasi|Du-Sha 09-18
+Xorazm|Bog'ot|9008|BOG'OT|O'zbekiston 62|Du-Sha 09-18
+Xorazm|Qo'shko'pir|9009|QO'SHKO'PIR|Sharof Rashidov 27|Du-Sha 09-18
+Xorazm|Shovot|9010|SHOVOT|Ma'rifat 2|Du-Sha 09-18
+Xorazm|Shovot|9017|SHOVOT 2|Paxtakor mahallasi|Du-Sha 09-18
+Xorazm|Yangibozor|9011|YANGIBOZOR|Sharshara|Du-Sha 09-18
+Xorazm|Yangiariq|9012|YANGIARIQ|Al-Xorazmiy 18A|Du-Sha 09-18
+Qoraqalpog'iston|Nukus|9501|NUKUS|Tatibayeva 22|Har kuni 09-22
+Qoraqalpog'iston|Nukus|9504|NUKUS 26-MKR|Piraj Seytov 1A|Du-Ju 09-18, Sha 09-16
+Qoraqalpog'iston|Qo'ng'irot|9502|QO'NG'IROT|Beruniy ko'chasi|Du-Sha 09-18
+Qoraqalpog'iston|Qo'ng'irot|9514|QO'NG'IROT 2|Nurmuhammedov 61|Du-Sha 09-18
+Qoraqalpog'iston|Beruniy|9503|BERUNIY|35-maktab ro'parasi|Du-Sha 09-18
+Qoraqalpog'iston|Beruniy|9515|BERUNIY BOZOR|Quruvchilar ko'chasi|Dush dam, 09-18
+Qoraqalpog'iston|Amudaryo|9505|AMUDARYO|Tadbirkorlar 11|Du-Sha 09-18
+Qoraqalpog'iston|To'rtko'l|9506|TO'RTKO'L|Otaniyozov 42|Du-Sha 09-18
+Qoraqalpog'iston|To'rtko'l|9516|TO'RTKO'L BOZOR|Beruniy 501|Du-Sha 09-18
+Qoraqalpog'iston|Ellikqal'a|9507|ELLIKQAL'A|Xalqlar Do'stligi ko'chasi|Du-Sha 09-18
+Qoraqalpog'iston|Taxiatosh|9509|TAXIATOSH|Kamolot 35A|Du-Sha 09-18
+Qoraqalpog'iston|Xo'jayli|9510|XO'JAYLI|Tandirchi 32|Du-Sha 09-18
+Qoraqalpog'iston|Chimboy|9511|CHIMBOY|Oltin Bo'sag'a 63|Du-Sha 09-18
+Qoraqalpog'iston|Kegeyli|9512|KEGEYLI|Do'stlik guzari 106|Du-Sha 09-18
+Qoraqalpog'iston|Qanliko'l|9513|QANLIKO'L|Do'stlik 63|Du-Sha 09-18
