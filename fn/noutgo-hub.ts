@@ -767,9 +767,9 @@ async function onInline(q: any) {
   const link = `https://t.me/noutgo_robot?start=ref_${code}`;
   const caption = `🎁 <b>${esc(q.from.first_name)} sizga noutgo'dan ${som(bonus)} so'm chegirma sovg'a qildi!</b>\n\nTekshirilgan premium noutbuklar · original zaryadka · 2 hafta kafolat · BTS orqali butun O'zbekiston bo'ylab.\n\nChegirma birinchi noutbukingizga avtomatik qo'llanadi 👇`;
   const markup = { inline_keyboard: [[{ text: `🎁 ${som(bonus)} so'm chegirmani olish`, url: link }]] };
+  const card = `${SUPA}/functions/v1/shop-api?a=refcard&v=2`;
   return tg("answerInlineQuery", { inline_query_id: q.id, cache_time: 0, is_personal: true, results: [
-    { type: "mpeg4_gif", id: "ref_anim", mpeg4_url: `${PAGES}/assets/ref.mp4`, mpeg4_width: 960, mpeg4_height: 540, thumbnail_url: `${PAGES}/assets/ref.jpg`, thumbnail_mime_type: "image/jpeg", title: "Taklifnoma (animatsiya)", caption, parse_mode: "HTML", reply_markup: markup },
-    { type: "photo", id: "ref_photo", photo_url: `${PAGES}/assets/ref.jpg`, thumbnail_url: `${PAGES}/assets/ref.jpg`, photo_width: 960, photo_height: 540, title: "Taklifnoma (rasm)", caption, parse_mode: "HTML", reply_markup: markup },
+    { type: "photo", id: "ref_card", photo_url: card, thumbnail_url: card, photo_width: 960, photo_height: 540, title: "Taklifnoma", description: `Do'stingizga ${som(bonus)} so'm chegirma`, caption, parse_mode: "HTML", reply_markup: markup },
   ] });
 }
 

@@ -2,6 +2,7 @@
 // Every call carries Telegram's signed initData; only bot_testers may use it while testing.
 // Admin order actions are replayed through noutgo-hub so the bot and the app share one order lifecycle.
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { Image } from "https://deno.land/x/imagescript@1.3.0/mod.ts";
 const BOT = Deno.env.get("TELEGRAM_BOT_TOKEN") ?? "";
 const GEMINI = Deno.env.get("GEMINI_API_KEY") ?? "";
 const SUPA = Deno.env.get("SUPABASE_URL")!;
@@ -18,6 +19,8 @@ async function tg(m: string, b: Record<string, unknown>) { const r = await fetch
 const esc = (s: unknown) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const som = (n: number) => Math.round(Number(n) || 0).toLocaleString("ru-RU").replace(/[  ,]/g, " ");
 async function setting(k: string, d = "") { const { data } = await db.from("bot_settings").select("value").eq("key", k).maybeSingle(); return data?.value ?? d; }
+// One round trip for many settings.
+async function settings(keys: string[]) { const { data } = await db.from("bot_settings").select("key,value").in("key", keys); return Object.fromEntries((data ?? []).map((r: any) => [r.key, r.value])) as Record<string, string>; }
 async function num(k: string, d: number) { return Number(await setting(k, String(d))) || d; }
 async function log(kind: string, uid: number, pid?: number | null, data?: unknown) { await db.from("events").insert({ source: "app", kind, user_id: uid, product_id: pid ?? null, data: data ?? null }); }
 const INFO_POST = "https://t.me/noutgo_uz/1669";
@@ -52,7 +55,7 @@ async function viaHub(from: any, data: string) {
 const imgSig = async (f: string) => hex(await hmac(enc.encode(BOT), "img:" + f)).slice(0, 20);
 const imgUrl = async (f: string) => `${SUPA}/functions/v1/shop-api?a=img&f=${encodeURIComponent(f)}&s=${await imgSig(f)}`;
 async function view(p: any) {
-  const photos = await Promise.all((p.photo_ids ?? []).map(imgUrl));
+  const photos = (p.photo_urls ?? []).length ? p.photo_urls : await Promise.all((p.photo_ids ?? []).map(imgUrl));
   return { sku: p.sku, model: p.model, category: p.category, price: p.price_usd, price_text: p.price, cpu: p.cpu, ram: p.ram_gb, ssd: p.ssd, screen: p.screen, gpu: p.gpu, color: p.color, battery: p.battery_pct, battery_hours: p.battery_hours, cond: p.cond_score, defects: p.defects, description: p.description, photos, has_video: !!p.video_id };
 }
 async function friendDiscount(uid: number) {
@@ -292,6 +295,21 @@ Deno.serve(async (req) => {
     const r = await fetch(`https://api.telegram.org/file/bot${BOT}/${fi.result.file_path}`);
     return new Response(r.body, { headers: { "content-type": "application/octet-stream", "cache-control": "public, max-age=2592000, immutable", ...CORS } });
   }
+  if (a === "logo") {
+    const { data } = await db.from("branding_assets").select("b64").eq("name", url.searchParams.get("v") === "light" ? "light" : "original").maybeSingle();
+    if (!data) return new Response("no", { status: 404 });
+    const bin = decode(data.b64), png = bin[0] === 0x89;
+    return new Response(bin, { headers: { "content-type": png ? "image/png" : "image/jpeg", "cache-control": "public, max-age=86400", ...CORS } });
+  }
+  if (a === "refcard") {
+    const [bg, lg] = await Promise.all([
+      fetch("https://nizomjonumaraliyev.github.io/github-slideshow/assets/ref-bg.png").then((r) => r.arrayBuffer()),
+      db.from("branding_assets").select("b64").eq("name", "original").maybeSingle(),
+    ]);
+    const card = await Image.decode(new Uint8Array(bg));
+    if (lg.data) { const logo = (await Image.decode(decode(lg.data.b64))).resize(120, 120).roundCorners(28); card.composite(logo, 52, 52); }
+    return new Response(await card.encodeJPEG(88), { headers: { "content-type": "image/jpeg", "cache-control": "public, max-age=86400", ...CORS } });
+  }
   if (a === "offices") { // public BTS office list (no personal data)
     const { data } = await db.from("bts_offices").select("code,region,city,name,address,hours").order("region").order("city").order("code");
     return new Response(JSON.stringify({ offices: data ?? [] }), { headers: { "content-type": "application/json", "cache-control": "public, max-age=86400", ...CORS } });
@@ -316,7 +334,7 @@ Deno.serve(async (req) => {
         if (body.kind === "ref") {
           const ref = await referral(user);
           const caption = `🎁 <b>${esc(user.first_name)} sizga noutgo'dan ${som(ref.bonus)} so'm chegirma sovg'a qildi!</b>\n\nTekshirilgan premium noutbuklar · original zaryadka · 2 hafta kafolat · BTS orqali butun O'zbekiston bo'ylab.\n\nChegirma birinchi noutbukingizga avtomatik qo'llanadi 👇`;
-          result = { type: "mpeg4_gif", id: "ref" + Date.now(), mpeg4_url: `${PAGES}/assets/ref.mp4`, mpeg4_width: 960, mpeg4_height: 540, thumbnail_url: `${PAGES}/assets/ref.jpg`, thumbnail_mime_type: "image/jpeg", caption, parse_mode: "HTML", reply_markup: { inline_keyboard: [[{ text: `🎁 ${som(ref.bonus)} so'm chegirmani olish`, url: ref.link }]] } };
+          result = { type: "photo", id: "ref" + Date.now(), photo_url: `${SUPA}/functions/v1/shop-api?a=refcard&v=2`, thumbnail_url: `${SUPA}/functions/v1/shop-api?a=refcard&v=2`, photo_width: 960, photo_height: 540, caption, parse_mode: "HTML", reply_markup: { inline_keyboard: [[{ text: `🎁 ${som(ref.bonus)} so'm chegirmani olish`, url: ref.link }]] } };
         } else {
           const { data: p } = await db.from("products").select("*").eq("sku", String(body.sku ?? "")).eq("status", "available").maybeSingle();
           if (!p) return json({ error: "Mahsulot topilmadi" });
@@ -331,6 +349,23 @@ Deno.serve(async (req) => {
         return json({ id: r2.result.id });
       }
       case "phone": { const cu = (await db.from("customers").select("phone").eq("user_id", user.id).maybeSingle()).data; return json({ phone: cu?.phone ?? null }); }
+      case "boot": {
+        const [_, s, cu, prods, ref] = await Promise.all([
+          touch(user),
+          settings(["usd_rate", "shop_live", "deposit_uzs", "shop_location", "address_text", "ref_friend_uzs"]),
+          db.from("customers").select("phone,session").eq("user_id", user.id).maybeSingle(),
+          db.from("products").select("*").eq("status", "available").not("sku", "is", null).order("sort"),
+          db.from("referrals").select("id").eq("friend_id", user.id).eq("state", "joined").maybeSingle(),
+        ]);
+        log("open", user.id, null, { start: body.start ?? null });
+        let discount = 0;
+        if (ref.data) { const { count } = await db.from("orders").select("*", { count: "exact", head: true }).eq("user_id", user.id).in("state", ["paid", "ready", "shipped", "delivered", "received", "reserved"]); discount = (count ?? 0) ? 0 : Number(s.ref_friend_uzs) || 100000; }
+        const loc = JSON.parse(s.shop_location || "null");
+        return json({
+          me: { user: { id: user.id, first_name: user.first_name, last_name: user.last_name ?? "", phone: cu.data?.phone ?? null }, info_post: INFO_POST, role: r, rate: Number(s.usd_rate) || 12000, live: s.shop_live === "1", deposit: Number(s.deposit_uzs) || 300000, discount, pickup: { address: s.address_text, phone: PHONE, lat: loc?.latitude, lng: loc?.longitude } },
+          items: await Promise.all((prods.data ?? []).map(view)), deals: cu.data?.session?.deals ?? {},
+        });
+      }
       case "catalog": { const { data } = await db.from("products").select("*").eq("status", "available").not("sku", "is", null).order("sort"); const { data: c } = await db.from("customers").select("session").eq("user_id", user.id).maybeSingle(); return json({ items: await Promise.all((data ?? []).map(view)), deals: c?.session?.deals ?? {} }); }
       case "view": { const { data: p } = await db.from("products").select("id").eq("sku", body.sku).maybeSingle(); if (p) await log("view", user.id, p.id, { sku: body.sku }); return json({ ok: true }); }
       case "offer": return json(await offer(user, body));
