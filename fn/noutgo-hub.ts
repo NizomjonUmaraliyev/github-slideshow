@@ -853,8 +853,8 @@ Deno.serve(async (req) => {
     if (url.searchParams.get("cron") === "warranty") { await warrantyJob(); return new Response("ok"); }
     if (url.searchParams.get("profile")) {
       const r = [
-        await tg("setMyShortDescription", { short_description: "Tekshirilgan premium b/u noutbuklar · original zaryadka · 2 hafta kafolat · BTS orqali butun O'zbekiston." }),
-        await tg("setMyDescription", { description: "💻 noutgo — Toshkentdagi premium b/u noutbuklar.\n\n✅ Har biri tekshirilgan, original zaryadkasi bilan\n🛡 2 hafta kafolat\n🚚 BTS orqali butun O'zbekiston bo'ylab\n🏠 Yunusobodda olib ketish\n💳 Kartaga o'tkazma\n\n📞 +998 50 570 55 79 · @noutgo" }),
+        await tg("setMyShortDescription", { short_description: "Noutbuk tanlang, solishtiring, narx taklif qiling va buyurtma bering — BTS orqali yoki Toshkentda olib ketish." }),
+        await tg("setMyDescription", { description: "noutgo rasmiy boti — premium b/u noutbuklar.\n\nBu yerda siz:\n💻 sotuvdagi noutbuklarni rasm, narx va holati bilan ko'rasiz\n⚖️ modellarni solishtirasiz, byudjet bo'yicha tanlaysiz\n💬 narx taklif qilasiz\n🛒 buyurtma berasiz: BTS — butun O'zbekiston, yoki Toshkentda olib ketish\n💳 kartaga to'laysiz, holat va BTS trek raqamini kuzatasiz\n✍️ adminga savol yuborasiz\n🎁 do'st taklif qilib, pul mukofoti olasiz\n\n🛡 2 hafta kafolat · original zaryadka\n📞 +998 50 570 55 79" }),
         await tg("setMySettings", { supports_inline_queries: true, inline_query_placeholder: "do'stga taklifnoma" }),
       ];
       return Response.json(r);
