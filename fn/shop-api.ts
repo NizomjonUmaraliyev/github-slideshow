@@ -283,6 +283,15 @@ Deno.serve(async (req) => {
     const r = await fetch(`https://api.telegram.org/file/bot${BOT}/${fi.result.file_path}`);
     return new Response(r.body, { headers: { "content-type": "image/jpeg", "cache-control": "public, max-age=604800, immutable", ...CORS } });
   }
+  if (a === "tgs") { // animated emoji sticker (Lottie .tgs, gzipped) for the Mini App
+    const e = url.searchParams.get("e") ?? "";
+    const map = JSON.parse((await setting("anim_stickers")) || "{}");
+    const id = map[e] ?? map[e.replace("\ufe0f", "")];
+    if (!id) return new Response("none", { status: 404, headers: CORS });
+    const fi = await tg("getFile", { file_id: id }); if (!fi.ok) return new Response("gone", { status: 404, headers: CORS });
+    const r = await fetch(`https://api.telegram.org/file/bot${BOT}/${fi.result.file_path}`);
+    return new Response(r.body, { headers: { "content-type": "application/octet-stream", "cache-control": "public, max-age=2592000, immutable", ...CORS } });
+  }
   if (a === "offices") { // public BTS office list (no personal data)
     const { data } = await db.from("bts_offices").select("code,region,city,name,address,hours").order("region").order("city").order("code");
     return new Response(JSON.stringify({ offices: data ?? [] }), { headers: { "content-type": "application/json", "cache-control": "public, max-age=86400", ...CORS } });
@@ -300,6 +309,26 @@ Deno.serve(async (req) => {
         const loc = JSON.parse((await setting("shop_location")) || "null");
         const cu = (await db.from("customers").select("phone").eq("user_id", user.id).maybeSingle()).data;
         return json({ user: { id: user.id, first_name: user.first_name, last_name: user.last_name ?? "", phone: cu?.phone ?? null }, info_post: INFO_POST, role: r, rate: await num("usd_rate", 12000), live: (await setting("shop_live", "0")) === "1", deposit: await num("deposit_uzs", 300000), discount: await friendDiscount(user.id), pickup: { address: await setting("address_text"), phone: PHONE, lat: loc?.latitude, lng: loc?.longitude } });
+      }
+      case "prep": { // prepared message for Telegram.WebApp.shareMessage
+        const PAGES = "https://nizomjonumaraliyev.github.io/github-slideshow";
+        let result: any;
+        if (body.kind === "ref") {
+          const ref = await referral(user);
+          const caption = `🎁 <b>${esc(user.first_name)} sizga noutgo'dan ${som(ref.bonus)} so'm chegirma sovg'a qildi!</b>\n\nTekshirilgan premium noutbuklar · original zaryadka · 2 hafta kafolat · BTS orqali butun O'zbekiston bo'ylab.\n\nChegirma birinchi noutbukingizga avtomatik qo'llanadi 👇`;
+          result = { type: "mpeg4_gif", id: "ref" + Date.now(), mpeg4_url: `${PAGES}/assets/ref.mp4`, mpeg4_width: 960, mpeg4_height: 540, thumbnail_url: `${PAGES}/assets/ref.jpg`, thumbnail_mime_type: "image/jpeg", caption, parse_mode: "HTML", reply_markup: { inline_keyboard: [[{ text: `🎁 ${som(ref.bonus)} so'm chegirmani olish`, url: ref.link }]] } };
+        } else {
+          const { data: p } = await db.from("products").select("*").eq("sku", String(body.sku ?? "")).eq("status", "available").maybeSingle();
+          if (!p) return json({ error: "Mahsulot topilmadi" });
+          const rate = await num("usd_rate", 12000);
+          const caption = `<b>${esc(p.model)}</b>\n${[p.cpu, p.ram_gb ? p.ram_gb + "GB RAM" : null, p.ssd, p.battery_pct ? "🔋 " + p.battery_pct + "%" : null].filter(Boolean).map(esc).join(" · ")}\n\n💰 <b>${p.price_usd}$</b> ≈ ${som(p.price_usd * rate)} so'm\n✅ Original zaryadka · 🛡 2 hafta kafolat · 🚚 BTS`;
+          const kb = { inline_keyboard: [[{ text: "🛍 Ko'rish va buyurtma", url: `https://t.me/noutgo_robot?start=${p.sku}` }]] };
+          result = p.photo_ids?.[0] ? { type: "photo", id: "p" + Date.now(), photo_file_id: p.photo_ids[0], caption, parse_mode: "HTML", reply_markup: kb } : { type: "article", id: "p" + Date.now(), title: p.model, input_message_content: { message_text: caption, parse_mode: "HTML" }, reply_markup: kb };
+        }
+        const r2 = await tg("savePreparedInlineMessage", { user_id: user.id, result, allow_user_chats: true, allow_group_chats: true, allow_channel_chats: true });
+        if (!r2.ok) return json({ error: r2.description || "share" });
+        await log("share", user.id, null, { kind: body.kind ?? "product", sku: body.sku ?? null });
+        return json({ id: r2.result.id });
       }
       case "phone": { const cu = (await db.from("customers").select("phone").eq("user_id", user.id).maybeSingle()).data; return json({ phone: cu?.phone ?? null }); }
       case "catalog": { const { data } = await db.from("products").select("*").eq("status", "available").not("sku", "is", null).order("sort"); const { data: c } = await db.from("customers").select("session").eq("user_id", user.id).maybeSingle(); return json({ items: await Promise.all((data ?? []).map(view)), deals: c?.session?.deals ?? {} }); }

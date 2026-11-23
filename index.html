@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>noutgo</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie_light.min.js" defer></script>
 <style>
 :root{--bg:var(--tg-theme-bg-color,#fff);--bg2:var(--tg-theme-secondary-bg-color,#f1f3f6);--fg:var(--tg-theme-text-color,#0e1318);--muted:var(--tg-theme-hint-color,#6d7883);--btn:var(--tg-theme-button-color,#2481cc);--btn-fg:var(--tg-theme-button-text-color,#fff);--line:color-mix(in srgb,var(--muted) 25%,transparent);--ok:#1f9a55;--warn:#c27a00;--bad:#d14343;--teal:#1aa9a9}
 *{box-sizing:border-box}html,body{margin:0;height:100%}
@@ -72,10 +73,31 @@ table.t{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeri
 textarea{width:100%;border:1px solid var(--line);background:var(--bg2);color:var(--fg);border-radius:10px;padding:10px 12px;font:inherit;min-height:70px}
 .cmp th{width:34%}.cmp td{width:33%}.better{color:var(--ok);font-weight:600}
 .u{padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}.u small{color:var(--muted)}
+/* motion — short, quiet, and off when the user prefers reduced motion */
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{0%{opacity:0;transform:scale(.92)}60%{opacity:1;transform:scale(1.02)}100%{transform:scale(1)}}
+@keyframes shimmer{to{background-position:-200% 0}}
+.enter>*{animation:up .28s cubic-bezier(.2,.7,.2,1) both}
+.enter>*:nth-child(2){animation-delay:.03s}.enter>*:nth-child(3){animation-delay:.06s}.enter>*:nth-child(4){animation-delay:.09s}.enter>*:nth-child(5){animation-delay:.12s}
+.grid .card{animation:up .32s cubic-bezier(.2,.7,.2,1) both}
+.grid .card:nth-child(2){animation-delay:.04s}.grid .card:nth-child(3){animation-delay:.08s}.grid .card:nth-child(4){animation-delay:.12s}.grid .card:nth-child(n+5){animation-delay:.16s}
+button,.card{transition:transform .12s ease,background-color .15s ease,border-color .15s ease}
+button:active,.card:active{transform:scale(.97)}
+.opt.on{animation:pop .25s ease both}
+.sk{border-radius:14px;background:linear-gradient(90deg,var(--bg) 25%,color-mix(in srgb,var(--muted) 14%,var(--bg)) 50%,var(--bg) 75%);background-size:200% 100%;animation:shimmer 1.2s linear infinite}
+.stk{display:inline-block;width:var(--s,96px);height:var(--s,96px)}
+.hero .stk{--s:44px;margin-left:auto}
+.empty .stk{--s:110px;display:block;margin:0 auto 6px}
+.ok-bg{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(6px);animation:fade .2s ease both}
+.ok-card{text-align:center;padding:24px;animation:pop .35s cubic-bezier(.2,.7,.2,1) both;max-width:300px}.ok-card .stk{--s:150px}.ok-card b{display:block;font-size:18px;margin-top:6px}.ok-card span{color:var(--muted)}
+.sheet{animation:up .25s cubic-bezier(.2,.7,.2,1) both}.sheet-bg{animation:fade .2s ease both}
+.menu button{display:flex;width:100%;gap:10px;align-items:center;border:0;background:none;color:var(--fg);font:inherit;padding:12px 4px;border-bottom:1px solid var(--line);text-align:left}.menu button:last-child{border:0}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div id="app"><div class="empty">Yuklanmoqda…</div></div>
+<div id="app"><div style="padding:12px"><div class="sk" style="height:64px;margin-bottom:12px"></div><div class="grid" style="padding:0"><div class="sk" style="height:190px"></div><div class="sk" style="height:190px"></div><div class="sk" style="height:190px"></div><div class="sk" style="height:190px"></div></div></div></div>
 <nav class="tabs" id="tabs" hidden></nav>
 <div class="toast" id="toast"></div>
 <script>
@@ -109,9 +131,56 @@ function main(label, fn, disabled){
   if (!label){ b.hide(); return; }
   main._fn = fn; b.setText(label); b.onClick(fn); disabled ? b.disable() : b.enable(); b.show();
 }
+function second(label, fn){
+  const b = tg?.SecondaryButton; if (!b || !tg.isVersionAtLeast?.("7.10")) return;
+  if (second._fn) b.offClick(second._fn); second._fn=null;
+  if (!label){ b.hide(); return; }
+  second._fn=fn; b.setParams({ text: label, position: "left", is_visible: true, is_active: true });
+  b.onClick(fn);
+}
 function back(on, fn){ const b = tg?.BackButton; if (!b) return; if (back._fn) b.offClick(back._fn); back._fn=null; if (!on){ b.hide(); return; } back._fn=fn; b.onClick(fn); b.show(); }
 const ST = {await_pay:"⏳ to'lov kutilmoqda",checking:"🔎 chek tekshirilmoqda",reserved:"🔒 band qilingan",paid:"✅ to'landi",ready:"📦 olib ketishga tayyor",shipped:"🚚 yo'lda",delivered:"📬 yetkazildi",received:"🎉 qabul qilindi",cancelled:"❌ bekor qilingan",expired:"⌛ muddati o'tgan",rejected:"⚠️ to'lov topilmadi"};
 const PM = {full:"to'liq oldindan", deposit:"qisman oldindan", on_pickup:"olib ketishda"};
+
+/* ---------- animated stickers (Telegram's official animated emoji, rendered with Lottie) ---------- */
+const STK = {};
+async function stkData(e){
+  if (STK[e]) return STK[e];
+  STK[e] = (async()=>{ const r = await fetch(`${API}?a=tgs&e=${encodeURIComponent(e)}`); if(!r.ok) throw 0;
+    const s = r.body.pipeThrough(new DecompressionStream("gzip")); return JSON.parse(await new Response(s).text()); })();
+  return STK[e];
+}
+const stk = (e, loop=true) => `<i class="stk" data-stk="${e}" data-loop="${loop?1:0}" aria-hidden="true"></i>`;
+function mountStickers(root=document){
+  if (!window.lottie || !window.DecompressionStream) return;
+  root.querySelectorAll("[data-stk]:not([data-on])").forEach(async el=>{
+    el.dataset.on=1;
+    try{ const data = await stkData(el.dataset.stk); if(!el.isConnected) return;
+      lottie.loadAnimation({ container: el, renderer: "svg", loop: el.dataset.loop==="1", autoplay: true, animationData: data }); }catch(x){ el.textContent = el.dataset.stk; el.style.cssText="font-size:calc(var(--s,96px)*.7);line-height:1;text-align:center"; }
+  });
+}
+function celebrate(e, title, sub, ms=2200){
+  document.querySelector(".ok-bg")?.remove();
+  document.body.insertAdjacentHTML("beforeend", `<div class="ok-bg" id="okbg"><div class="ok-card">${stk(e,false)}<b>${title}</b><span>${sub||""}</span></div></div>`);
+  mountStickers($("okbg")); try{ tg?.HapticFeedback?.notificationOccurred("success"); }catch(x){}
+  const close=()=>$("okbg")?.remove(); $("okbg").addEventListener("click", close); setTimeout(close, ms);
+}
+async function share(kind, sku){
+  try{
+    if (tg?.shareMessage && tg.isVersionAtLeast?.("8.0")){ const { id } = await api("prep", { kind, sku }); return tg.shareMessage(id, ok=>{ if(ok) toast("✅ Yuborildi"); }); }
+  }catch(x){ /* fall back below */ }
+  const url = kind==="ref" ? (S.ref?.link||"") : `https://t.me/noutgo_robot?start=${sku}`;
+  tg?.openTelegramLink?.(`https://t.me/share/url?url=${encodeURIComponent(url)}`);
+}
+function menuSheet(){
+  haptic();
+  document.body.insertAdjacentHTML("beforeend",`<div class="sheet-bg" id="sb"><div class="sheet menu">
+    <button data-go="admin">💬 <span>Admin bilan bog'lanish</span></button>
+    <button data-go="info">ℹ️ <span>To'lov va yetkazish tartibi</span></button>
+    <button data-go="channel">📢 <span>noutgo kanali</span></button>
+    <button data-go="call">📞 <span>${esc(S.me?.pickup?.phone||"+998 50 570 55 79")}</span></button>
+    <button data-close>✕ <span>Yopish</span></button></div></div>`);
+}
 
 /* ---------- catalog ---------- */
 function home(){
@@ -120,12 +189,12 @@ function home(){
   const list = S.items.filter(p => f==="all" || (f==="laptop"&&p.category==="laptop") || (f==="acc"&&p.category!=="laptop") || (f==="ram16"&&p.category==="laptop"&&p.ram>=16) || (budget&&p.category==="laptop"&&p.price>=budget[0]&&p.price<budget[1]))
     .filter(p => !q || (p.model+" "+(p.cpu||"")+" "+(p.ram||"")+"gb").toLowerCase().includes(q));
   const F=[["all","Hammasi"],["laptop","Noutbuklar"],["lt250","250$ gacha"],["250350","250–350$"],["gt350","350$+"],["ram16","16GB+ RAM"],["acc","Aksessuarlar"]];
-  return `<div class="hero"><div class="logo"><span>n<i>g</i></span></div><div style="flex:1"><b>noutgo</b><small>Premium b/u noutbuklar · 2 hafta kafolat · BTS</small></div>${S.home==="missed"?`<button class="chip" data-homescreen style="background:#1aa9a9;color:#fff;border:0">📲 Ekranga</button>`:""}</div>
+  return `<div class="hero"><div class="logo"><span>n<i>g</i></span></div><div style="flex:1"><b>noutgo</b><small>Premium b/u noutbuklar · 2 hafta kafolat · BTS</small></div>${stk("💻")}${S.home==="missed"?`<button class="chip" data-homescreen style="background:#1aa9a9;color:#fff;border:0">📲 Ekranga</button>`:""}</div>
   ${S.me && !S.me.live ? `<div class="test">🧪 Test rejimi — faqat testerlar ko'radi</div>`:""}
   ${S.me?.discount ? `<div class="msg" style="margin:10px 12px 0">🎁 Sizga birinchi noutbukka <b>${so(S.me.discount)} so'm</b> chegirma — buyurtmada avtomatik hisoblanadi.</div>`:""}
   <label class="search">🔎<input id="q" type="search" placeholder="Model, protsessor yoki RAM…" value="${esc(S.q)}"></label>
   <div class="chips">${F.map(([k,t])=>`<button class="chip ${S.filter===k?"on":""}" data-filter="${k}">${t}</button>`).join("")}</div>
-  ${list.length ? `<div class="grid">${list.map(p=>`<button class="card" data-open="${p.sku}">${p.photos[0]?`<img class="ph" loading="lazy" src="${p.photos[0]}" alt="">`:`<div class="ph"></div>`}<div class="cb"><span class="nm">${esc(short(p.model))}</span><span class="sp">${p.ram?`${p.ram}GB · ${esc(p.ssd||"")}`:esc(p.screen||"")}</span>${p.battery?`<span class="pill">🔋 ${p.battery}%</span>`:""}${p.defects?`<span class="pill w">⚠️ kamchilik bor</span>`:""}<span class="pr">${p.price?priceOf(p)+"$":esc(p.price_text)} ${dot(p)}</span></div></button>`).join("")}</div>` : `<div class="empty">Bu oraliqda hozir noutbuk yo'q.</div>`}`;
+  ${list.length ? `<div class="grid">${list.map(p=>`<button class="card" data-open="${p.sku}">${p.photos[0]?`<img class="ph" loading="lazy" src="${p.photos[0]}" alt="">`:`<div class="ph"></div>`}<div class="cb"><span class="nm">${esc(short(p.model))}</span><span class="sp">${p.ram?`${p.ram}GB · ${esc(p.ssd||"")}`:esc(p.screen||"")}</span>${p.battery?`<span class="pill">🔋 ${p.battery}%</span>`:""}${p.defects?`<span class="pill w">⚠️ kamchilik bor</span>`:""}<span class="pr">${p.price?priceOf(p)+"$":esc(p.price_text)} ${dot(p)}</span></div></button>`).join("")}</div>` : `<div class="empty">${stk("🔍")}Bu oraliqda hozir noutbuk yo'q.</div>`}`;
 }
 function product(){
   const p = S.items.find(x=>x.sku===S.pid); if (!p) return `<div class="empty">Topilmadi</div>`;
@@ -133,7 +202,7 @@ function product(){
   return `<div class="gal"><div class="strip" id="strip">${p.photos.map(u=>`<img src="${u}" alt="">`).join("")}</div>${p.photos.length>1?`<span class="n" id="gn">1/${p.photos.length}</span>`:""}</div>
   <div class="sect"><h2>${esc(p.model)}</h2>${p.price?`<div class="price">${priceOf(p)}$ <small>≈ ${so(priceOf(p)*(S.me?.rate||12000))} so'm</small></div>`:`<div class="price">${esc(p.price_text)}</div>`}
    ${deal?`<div class="pill" style="margin-top:6px">🤝 Siz uchun kelishilgan narx (ro'yxatda ${p.price}$)</div>`:""}
-   ${p.price?`<div class="row2" style="margin-top:10px"><button class="ghost" data-offer>💬 Narx taklifi</button>${p.category==="laptop"?`<button class="ghost" data-cmpwith="${p.sku}">⚖️ Solishtirish</button>`:""}<button class="ghost" data-share>📤</button></div>`:""}${m?`<div class="msg">${m}</div>`:""}</div>
+   ${p.price?`<div class="row2" style="margin-top:10px"><button class="ghost" data-offer>💬 Narx taklifi</button>${p.category==="laptop"?`<button class="ghost" data-cmpwith="${p.sku}">⚖️ Solishtirish</button>`:""}<button class="ghost" data-share title="Ulashish">📤</button></div>`:""}${m?`<div class="msg">${m}</div>`:""}</div>
   <div class="sect"><h3>Holati</h3><dl class="kv">
    ${p.battery?`<dt>Batareya</dt><dd>${p.battery}%${p.battery_hours?" · "+esc(p.battery_hours):""}<div class="bar"><i style="width:${p.battery}%"></i></div></dd>`:""}
    ${p.cond?`<dt>Holati</dt><dd>${esc(p.cond)}</dd>`:""}${p.defects?`<dt>Kamchilik</dt><dd style="color:var(--warn)">${esc(p.defects)}</dd>`:""}
@@ -149,7 +218,7 @@ function compare(){
   const sel = i => `<select id="cmp${i}">${L.map(p=>`<option value="${p.sku}" ${p.sku===S.cmp[i]?"selected":""}>${esc(short(p.model))} — ${p.price}$</option>`).join("")}</select>`;
   const ssd = s => { const m=String(s||"").match(/(\d+)\s*(TB|GB)/i); return m ? Number(m[1])*(m[2].toUpperCase()==="TB"?1024:1) : 0; };
   const row = (k, x, y, nx, ny, lowWins) => { const bx = nx!=null&&ny!=null&&nx!==ny&&(lowWins?nx<ny:nx>ny), by = nx!=null&&ny!=null&&nx!==ny&&!bx; return `<tr><th>${k}</th><td class="${bx?"better":""}">${esc(x??"—")}</td><td class="${by?"better":""}">${esc(y??"—")}</td></tr>`; };
-  return `<div class="sect"><h2>⚖️ Solishtirish</h2><p style="margin:0;color:var(--muted)">Ikki noutbukni tanlang — yaxshiroq qiymat yashil rangda.</p></div>
+  return `<div class="sect" style="display:flex;align-items:center;gap:10px"><div style="flex:1"><h2>⚖️ Solishtirish</h2><p style="margin:0;color:var(--muted)">Ikki noutbukni tanlang — yaxshiroq qiymat yashil rangda.</p></div><span style="--s:52px" class="stk-wrap">${stk("🧐")}</span></div>
   <div class="sect"><div class="row2"><div class="field" style="flex:1;min-width:0">${sel(0)}</div><div class="field" style="flex:1;min-width:0">${sel(1)}</div></div>
   <div class="row2" style="margin-bottom:10px">${[a,b].map(p=>p.photos[0]?`<img src="${p.photos[0]}" style="flex:1;min-width:0;aspect-ratio:4/3;object-fit:cover;border-radius:10px">`:`<div style="flex:1"></div>`).join("")}</div>
   <table class="t cmp">
@@ -223,7 +292,7 @@ function steps(o){
   return `<ol class="steps">${L.map(([t,s])=>{ const d = s===1 || s.includes(o.state); return `<li class="${d?"done":""}"><div class="d">${d?"✓":""}</div><span>${t}</span></li>`; }).join("")}</ol>`;
 }
 function orders(){
-  if (!S.orders.length) return `<div class="empty">📦 Hozircha buyurtma yo'q.<br><br><button class="ghost" data-tab="home">💻 Katalogga o'tish</button></div>`;
+  if (!S.orders.length) return `<div class="empty">${stk("📭")}Hozircha buyurtma yo'q.<br><br><button class="ghost" data-tab="home">💻 Katalogga o'tish</button></div>`;
   return S.orders.map(o=>{
     const dead = ["cancelled","expired"].includes(o.state), fb=S.fb[o.id]||{rating:0,text:""};
     return `<div class="sect"><h2>#${esc(o.number)}${o.is_test?" 🧪":""}</h2><p style="margin:2px 0 8px">${esc(o.products?.model||"")} · ${so(o.total_uzs)} so'm<br><b>${ST[o.state]||o.state}</b> · ${o.delivery==="pickup"?"🏠 olib ketish":"🚚 BTS"} · ${PM[o.pay_mode]||""}</p>
@@ -243,7 +312,7 @@ function orders(){
 /* ---------- referral (money only) ---------- */
 function ref(){
   const r=S.ref||{};
-  return `<div class="hero"><div class="logo">🎁</div><div><b>Do'stingizni olib keling</b><small>Ikkalangiz ham pul yutasiz</small></div></div>
+  return `<div class="hero"><div><b>Do'stingizni olib keling</b><small>Ikkalangiz ham pul yutasiz</small></div>${stk("💸")}</div>
   <div class="sect"><dl class="kv"><dt>Do'stingiz</dt><dd><b>${so(r.bonus||100000)} so'm</b> chegirma — birinchi noutbukka</dd><dt>Siz</dt><dd><b>${so(r.reward||150000)} so'm</b> — har bir xarid qilgan do'st uchun, kartangizga</dd></dl></div>
   <div class="sect"><h3>Havolangiz</h3><div class="cardno"><div style="min-width:0"><small>Shaxsiy havola</small><b style="font-size:13px;letter-spacing:0;word-break:break-all">${esc(r.link||"…")}</b></div><button data-copy="${esc(r.link||"")}">Nusxalash</button></div>
    <video src="assets/ref.mp4" poster="assets/ref.jpg" autoplay muted loop playsinline style="width:100%;border-radius:12px;margin-top:10px;display:block"></video>
@@ -305,14 +374,18 @@ function aStats(){
 /* ---------- render ---------- */
 function render(){
   const s=S.screen;
+  const app=$("app"); app.classList.remove("enter"); void app.offsetWidth; if(render._last!==s) app.classList.add("enter"); render._last=s;
   $("app").innerHTML = s==="home"?home(): s==="product"?product(): s==="compare"?compare(): s==="checkout"?checkout(): s==="pay"?pay(): s==="orders"?orders(): s==="ref"?ref(): dash();
   const tabs=[["home","💻","Katalog"],["compare","⚖️","Solishtirish"],["orders","📦","Buyurtmalar"],["ref","🎁","Taklif"]]; if (S.me?.role==="admin") tabs.push(["dash","🛠","Admin"]);
   const T=$("tabs"); T.hidden=["product","checkout","pay"].includes(s); T.style.setProperty("--n",tabs.length);
   T.innerHTML=tabs.map(([k,i,l])=>`<button data-tab="${k}" class="${S.tab===k?"on":""}"><b>${i}</b>${l}</button>`).join("");
-  if (s==="product"){ const p=S.items.find(x=>x.sku===S.pid); if(p?.price) main(`🛒 Buyurtma berish · ${priceOf(p)}$`, startCheckout); else main(null); back(true, ()=>openTab(S.tab==="compare"?"compare":"home")); }
+  second(null);
+  try{ ["checkout","pay"].includes(s) ? tg?.enableClosingConfirmation?.() : tg?.disableClosingConfirmation?.(); }catch(x){}
+  if (s==="product"){ const p=S.items.find(x=>x.sku===S.pid); if(p?.price){ main(`🛒 Buyurtma · ${priceOf(p)}$`, startCheckout); second("💬 Taklif", offerSheet); } else main(null); back(true, ()=>openTab(S.tab==="compare"?"compare":"home")); }
   else if (s==="checkout"){ const c=calc(); main(S.form.delivery==="pickup"&&S.form.pay==="later" ? "🔒 3 soatga band qilish" : `💳 Buyurtma · hozir ${so(c.now)} so'm`, placeOrder, !ready()); back(true, ()=>go("product")); }
   else if (s==="pay"){ main(S.order.sent?"📦 Buyurtmalarim":(S.receipt?"✅ Chekni yuborish":"📎 Avval chekni tanlang"), S.order.sent?()=>openTab("orders"):sendReceipt, !S.order.sent&&!S.receipt); back(true, ()=>openTab("orders")); if(S.order.mode!=="balance") startTimer(); }
   else { main(null); back(false); }
+  mountStickers($("app"));
   const q=$("q"); if(q) q.addEventListener("input", e=>{ S.q=e.target.value; const pos=e.target.selectionStart; render(); const n=$("q"); n.focus(); n.setSelectionRange(pos,pos); });
   const st=$("strip"); if(st) st.addEventListener("scroll", ()=>{ const i=Math.round(st.scrollLeft/st.clientWidth)+1; const g=$("gn"); if(g) g.textContent=`${i}/${st.children.length}`; });
   const on = (id, fn) => { const el=$(id); if(el) el.addEventListener("change", e=>fn(e.target.value)); };
@@ -353,13 +426,14 @@ async function placeOrder(){
     const o=await api("order",{sku:S.pid, delivery:f.delivery, pay:f.pay, office:f.office, name:f.name, phone:f.phone});
     CS.set("buyer", JSON.stringify({name:f.name, phone:f.phone, region:f.region, city:f.city, office:f.office}));
     haptic("medium"); S.receipt=null; S.me.discount=0;
-    if(!o.pay_now){ toast(`#${o.number}: 3 soatga band qilindi`); return openTab("orders"); }
+    if(!o.pay_now){ celebrate("🎉", `#${o.number} band qilindi`, "3 soat ichida keling — oldin qo'ng'iroq qiling"); return openTab("orders"); }
+    celebrate("🎉", `Buyurtma #${o.number}`, "Endi kartaga o'tkazib, chekni yuboring", 1800);
     S.order={...o, delivery:f.delivery}; go("pay");
   }catch(e){ toast(e.message); } finally { tg?.MainButton?.hideProgress(); }
 }
 async function sendReceipt(){
   tg?.MainButton?.showProgress();
-  try{ await api("receipt",{order_id:S.order.id, data:S.receipt.data, mime:S.receipt.mime}); S.order.sent=true; tg?.HapticFeedback?.notificationOccurred("success"); render(); }
+  try{ await api("receipt",{order_id:S.order.id, data:S.receipt.data, mime:S.receipt.mime}); S.order.sent=true; celebrate("⏳", "Chek yuborildi", "Admin tasdiqlashi bilan bot xabar beradi"); render(); }
   catch(e){ toast(e.message); } finally { tg?.MainButton?.hideProgress(); }
 }
 function offerSheet(){
@@ -370,7 +444,7 @@ function offerSheet(){
 async function sendOffer(){
   const v=Number($("or").value); $("sb").remove();
   try{ const r=await api("offer",{sku:S.pid, v}); const sku=S.pid;
-    if(r.result==="accepted"){ S.deals[sku]=r.price; S.offerMsg[sku]=`🤝 Kelishdik: <b>${r.price}$</b>. Narx 2 soat saqlanadi.`; haptic("medium"); }
+    if(r.result==="accepted"){ S.deals[sku]=r.price; S.offerMsg[sku]=`🤝 Kelishdik: <b>${r.price}$</b>. Narx 2 soat saqlanadi.`; celebrate("🤝", `Kelishdik — ${r.price}$`, "Narx 2 soat saqlanadi"); }
     else if(r.result==="counter"){ S.offerMsg[sku]=`${v}$ ga bera olmaymiz, lekin siz uchun <b>${r.price}$</b> qilishimiz mumkin.<button class="ghost" data-accept="${r.price}" style="width:100%;margin-top:8px">✅ ${r.price}$ ga roziman</button>`; }
     else S.offerMsg[sku]=`Taklifingiz (${v}$) adminga yuborildi 🙏 Javob bot chatiga keladi.`;
     render(); }catch(e){ toast(e.message); }
@@ -380,7 +454,7 @@ document.addEventListener("click", async e=>{
   const t=e.target.closest("button,[data-open]"); if(!t) return; const d=t.dataset;
   try{
   if(d.tab) return openTab(d.tab);
-  if(d.filter){ S.filter=d.filter; return render(); }
+  if(d.filter){ S.filter=d.filter; try{ tg?.HapticFeedback?.selectionChanged(); }catch(x){} return render(); }
   if(d.open){ S.pid=d.open; go("product"); haptic(); api("view",{sku:d.open}).catch(()=>{}); return; }
   if("homescreen" in d){ tg.addToHomeScreen(); return; }
   if(d.cmpwith){ S.cmp=[d.cmpwith,""]; return openTab("compare"); }
@@ -388,8 +462,9 @@ document.addEventListener("click", async e=>{
   if("close" in d) return $("sb").remove();
   if("sendoffer" in d) return sendOffer();
   if(d.accept){ await api("accept",{sku:S.pid, price:Number(d.accept)}); S.deals[S.pid]=Number(d.accept); S.offerMsg[S.pid]=`🤝 Kelishdik: <b>${d.accept}$</b>.`; return render(); }
-  if("share" in d){ const url=`https://t.me/noutgo_robot?start=${S.pid}`; tg?.openTelegramLink?.(`https://t.me/share/url?url=${encodeURIComponent(url)}`); return; }
-  if("sharelink" in d){ if(tg?.switchInlineQuery && tg.isVersionAtLeast?.("6.7")) return tg.switchInlineQuery("ref",["users","groups"]); tg?.openTelegramLink?.(`https://t.me/share/url?url=${encodeURIComponent(S.ref?.link||"")}&text=${encodeURIComponent(`noutgo'dan noutbuk oling — ${so(S.ref?.bonus||100000)} so'm chegirma bilan`)}`); return; }
+  if("share" in d) return share("product", S.pid);
+  if(d.go){ $("sb")?.remove(); const g=d.go; if(g==="admin") return tg?.openTelegramLink?.("https://t.me/noutgo"); if(g==="info") return tg?.openTelegramLink?.("https://t.me/noutgo_uz/1669"); if(g==="channel") return tg?.openTelegramLink?.("https://t.me/noutgo_uz"); if(g==="call"){ try{ await navigator.clipboard.writeText((S.me?.pickup?.phone||"+998505705579").replace(/\s/g,"")); }catch(x){} return toast("📞 Raqam nusxalandi"); } }
+  if("sharelink" in d){ if(tg?.shareMessage && tg.isVersionAtLeast?.("8.0")) return share("ref"); if(tg?.switchInlineQuery && tg.isVersionAtLeast?.("6.7")) return tg.switchInlineQuery("ref",["users","groups"]); tg?.openTelegramLink?.(`https://t.me/share/url?url=${encodeURIComponent(S.ref?.link||"")}&text=${encodeURIComponent(`noutgo'dan noutbuk oling — ${so(S.ref?.bonus||100000)} so'm chegirma bilan`)}`); return; }
   if(d.copy){ try{ await navigator.clipboard.writeText(d.copy); toast("Nusxalandi"); }catch(x){ toast(d.copy); } return; }
   if(d.dl){ S.form.delivery=d.dl; if(d.dl==="bts"){ loadOffices(); S.form.pay="deposit"; } else if(S.form.pay==="deposit") S.form.pay="full"; return render(); }
   if(d.pay){ S.form.pay=d.pay; haptic(); return render(); }
@@ -407,17 +482,21 @@ document.addEventListener("click", async e=>{
       done(p?(String(p).startsWith("+")?p:"+"+p):null); });
     return; }
   if(d.cancel){ if(!(await confirm("Buyurtmani bekor qilasizmi?"))) return; await api("cancel",{order_id:Number(d.cancel)}); toast("Bekor qilindi"); return reloadOrders(); }
-  if(d.received){ await api("received",{order_id:Number(d.received)}); tg?.HapticFeedback?.notificationOccurred("success"); toast("Rahmat! Endi baholang 🙏"); return reloadOrders(); }
+  if(d.received){ await api("received",{order_id:Number(d.received)}); celebrate("🥳", "Xaridingiz muborak!", "Kafolat: 2 hafta. Endi baholang 🙏"); return reloadOrders(); }
   if(d.star){ const [id,n]=d.star.split(":"); S.fb[id]={...(S.fb[id]||{}), rating:Number(n), text:$("fbt"+id)?.value||""}; return render(); }
-  if(d.sendfb){ const id=d.sendfb, fb=S.fb[id]||{}; if(!fb.rating) return toast("Avval yulduzcha bilan baholang"); await api("feedback",{order_id:Number(id), rating:fb.rating, text:$("fbt"+id)?.value||""}); toast("Fikringiz yuborildi — rahmat!"); return reloadOrders(); }
+  if(d.sendfb){ const id=d.sendfb, fb=S.fb[id]||{}; if(!fb.rating) return toast("Avval yulduzcha bilan baholang"); await api("feedback",{order_id:Number(id), rating:fb.rating, text:$("fbt"+id)?.value||""}); celebrate(fb.rating>=4?"❤️":"🙏", "Rahmat!", "Fikringiz biz uchun muhim"); return reloadOrders(); }
   if(d.asub){ S.asub=d.asub; render(); await loadAdmin(); return render(); }
   if(d.act){ const [k,id]=d.act.split(":"); const q={pok:"To'lovni tasdiqlaysizmi?",pno:"To'lovni rad etasizmi?",aho:"Noutbuk topshirildi va to'liq to'landimi?",adl:"Yetkazildi deb belgilaysizmi?",acn:"Buyurtmani bekor qilasizmi?"}[k]; if(!(await confirm(q))) return; await api("a_act",{act:k, order_id:Number(id)}); toast("Bajarildi"); setTimeout(async()=>{ S.aorders=await api("a_orders"); render(); },1500); return; }
   if(d.track){ const id=d.track, tr=$("tr"+id)?.value.trim(); if(!tr) return toast("Trek raqamini kiriting"); t.disabled=true; const f=(S.tfile||{})[id]; await api("a_track",{order_id:Number(id), track:tr, data:f?.data, mime:f?.mime}); toast("Mijozga yuborildi"); S.aorders=await api("a_orders"); return render(); }
   }catch(x){ toast(x.message); t.disabled=false; }
 });
+window.addEventListener("load", ()=>mountStickers());
 (async function start(){
   if(!tg?.initData){ $("app").innerHTML=`<div class="closed"><h2>noutgo</h2><p>Bu ilova Telegram ichida ochiladi: <b>@noutgo_robot</b></p></div>`; return; }
-  tg.ready(); tg.expand(); try{ tg.setHeaderColor("#000000"); }catch(e){}
+  tg.ready(); tg.expand();
+  try{ tg.setHeaderColor("#000000"); tg.setBackgroundColor("secondary_bg_color"); if(tg.isVersionAtLeast("7.10")) tg.setBottomBarColor("bg_color"); }catch(e){}
+  try{ if(tg.isVersionAtLeast("7.7")) tg.disableVerticalSwipes(); }catch(e){}
+  try{ if(tg.isVersionAtLeast("7.0")){ tg.SettingsButton.onClick(menuSheet); tg.SettingsButton.show(); } }catch(e){}
   try{
     const sp = tg.initDataUnsafe?.start_param || (location.hash.match(/p=([\w-]+)/)||[])[1] || "";
     S.me = await api("me",{start:sp}); await loadCatalog();
