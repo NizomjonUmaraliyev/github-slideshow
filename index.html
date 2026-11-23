@@ -120,7 +120,7 @@ function home(){
   const list = S.items.filter(p => f==="all" || (f==="laptop"&&p.category==="laptop") || (f==="acc"&&p.category!=="laptop") || (f==="ram16"&&p.category==="laptop"&&p.ram>=16) || (budget&&p.category==="laptop"&&p.price>=budget[0]&&p.price<budget[1]))
     .filter(p => !q || (p.model+" "+(p.cpu||"")+" "+(p.ram||"")+"gb").toLowerCase().includes(q));
   const F=[["all","Hammasi"],["laptop","Noutbuklar"],["lt250","250$ gacha"],["250350","250–350$"],["gt350","350$+"],["ram16","16GB+ RAM"],["acc","Aksessuarlar"]];
-  return `<div class="hero"><div class="logo"><span>n<i>g</i></span></div><div><b>noutgo</b><small>Premium b/u noutbuklar · 2 hafta kafolat · BTS</small></div></div>
+  return `<div class="hero"><div class="logo"><span>n<i>g</i></span></div><div style="flex:1"><b>noutgo</b><small>Premium b/u noutbuklar · 2 hafta kafolat · BTS</small></div>${S.home==="missed"?`<button class="chip" data-homescreen style="background:#1aa9a9;color:#fff;border:0">📲 Ekranga</button>`:""}</div>
   ${S.me && !S.me.live ? `<div class="test">🧪 Test rejimi — faqat testerlar ko'radi</div>`:""}
   ${S.me?.discount ? `<div class="msg" style="margin:10px 12px 0">🎁 Sizga birinchi noutbukka <b>${so(S.me.discount)} so'm</b> chegirma — buyurtmada avtomatik hisoblanadi.</div>`:""}
   <label class="search">🔎<input id="q" type="search" placeholder="Model, protsessor yoki RAM…" value="${esc(S.q)}"></label>
@@ -331,12 +331,21 @@ async function loadAdmin(){ if(S.asub==="orders") S.aorders=await api("a_orders"
 async function loadCatalog(){ const j=await api("catalog"); S.items=j.items; S.deals=j.deals||{}; }
 async function loadOffices(){ if(S.offices) return; try{ const r=await fetch(`${API}?a=offices`); S.offices=(await r.json()).offices||[]; if(S.screen==="checkout") render(); }catch(e){ toast("Filiallar yuklanmadi"); } }
 let timer; function startTimer(){ clearInterval(timer); const end=S.order.reserved_until; const tick=()=>{ const el=$("timer"); if(!el) return clearInterval(timer); let s=Math.max(0,Math.round((end-Date.now())/1000)); const h=Math.floor(s/3600), m=Math.floor(s%3600/60); s%=60; el.textContent=`${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`; }; tick(); timer=setInterval(tick,1000); }
-function startCheckout(){ S.form.name = S.form.name || tg?.initDataUnsafe?.user?.first_name || ""; go("checkout"); loadOffices(); }
+// Remember the buyer's details in Telegram Cloud Storage (per user, synced across devices).
+const CS = { get(k){ return new Promise(r=>{ try{ tg?.CloudStorage ? tg.CloudStorage.getItem(k,(e,v)=>r(e?null:v)) : r(null); }catch(x){ r(null); } }); }, set(k,v){ try{ tg?.CloudStorage?.setItem(k, String(v??"")); }catch(x){} } };
+async function startCheckout(){
+  const saved = JSON.parse((await CS.get("buyer")) || "null") || {};
+  for (const k of ["name","phone","region","city","office"]) if (!S.form[k] && saved[k]) S.form[k] = saved[k];
+  S.form.name = S.form.name || tg?.initDataUnsafe?.user?.first_name || "";
+  if (saved.office) S.form.delivery = "bts";
+  go("checkout"); loadOffices();
+}
 async function placeOrder(){
   if(!ready()) return toast(S.form.delivery==="bts"&&!S.form.office?"BTS filialini tanlang":"Ism va telefon raqamini kiriting");
   const f=S.form; tg?.MainButton?.showProgress();
   try{
     const o=await api("order",{sku:S.pid, delivery:f.delivery, pay:f.pay, office:f.office, name:f.name, phone:f.phone});
+    CS.set("buyer", JSON.stringify({name:f.name, phone:f.phone, region:f.region, city:f.city, office:f.office}));
     haptic("medium"); S.receipt=null; S.me.discount=0;
     if(!o.pay_now){ toast(`#${o.number}: 3 soatga band qilindi`); return openTab("orders"); }
     S.order=o; go("pay");
@@ -367,6 +376,7 @@ document.addEventListener("click", async e=>{
   if(d.tab) return openTab(d.tab);
   if(d.filter){ S.filter=d.filter; return render(); }
   if(d.open){ S.pid=d.open; go("product"); haptic(); api("view",{sku:d.open}).catch(()=>{}); return; }
+  if("homescreen" in d){ tg.addToHomeScreen(); return; }
   if(d.cmpwith){ S.cmp=[d.cmpwith,""]; return openTab("compare"); }
   if("offer" in d) return offerSheet();
   if("close" in d) return $("sb").remove();
@@ -395,6 +405,7 @@ document.addEventListener("click", async e=>{
   try{
     const sp = tg.initDataUnsafe?.start_param || (location.hash.match(/p=([\w-]+)/)||[])[1] || "";
     S.me = await api("me",{start:sp}); await loadCatalog();
+    try{ if(tg.isVersionAtLeast?.("8.0")){ tg.checkHomeScreenStatus(s=>{ S.home=s; if(S.screen==="home") render(); }); tg.onEvent("homeScreenAdded",()=>{ S.home="added"; toast("✅ Bosh ekranga qo'shildi"); render(); }); } }catch(x){}
     if(location.hash==="#admin" && S.me.role==="admin") return openTab("dash");
     const sku = sp.split("_")[0].toUpperCase();
     if(sku && S.items.some(p=>p.sku===sku)){ S.pid=sku; go("product"); } else render();
