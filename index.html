@@ -111,7 +111,7 @@ function main(label, fn, disabled){
 }
 function back(on, fn){ const b = tg?.BackButton; if (!b) return; if (back._fn) b.offClick(back._fn); back._fn=null; if (!on){ b.hide(); return; } back._fn=fn; b.onClick(fn); b.show(); }
 const ST = {await_pay:"⏳ to'lov kutilmoqda",checking:"🔎 chek tekshirilmoqda",reserved:"🔒 band qilingan",paid:"✅ to'landi",ready:"📦 olib ketishga tayyor",shipped:"🚚 yo'lda",delivered:"📬 yetkazildi",received:"🎉 qabul qilindi",cancelled:"❌ bekor qilingan",expired:"⌛ muddati o'tgan",rejected:"⚠️ to'lov topilmadi"};
-const PM = {full:"to'liq oldindan", deposit:"band to'lovi", on_pickup:"olib ketishda"};
+const PM = {full:"to'liq oldindan", deposit:"qisman oldindan", on_pickup:"olib ketishda"};
 
 /* ---------- catalog ---------- */
 function home(){
@@ -173,7 +173,7 @@ function calc(){
   const office = (S.offices||[]).find(o=>o.code===f.office);
   const dfee = f.delivery==="pickup" ? 0 : office ? (office.region.startsWith("Toshkent")?30000:45000) : 0;
   const base = priceOf(p)*rate, disc = S.me?.discount||0, total = base+dfee-disc;
-  const now = f.delivery==="bts" || f.pay==="full" ? total : f.pay==="deposit" ? (S.me?.deposit||300000) : 0;
+  const now = f.pay==="full" ? total : f.pay==="deposit" ? (S.me?.deposit||300000) : f.delivery==="bts" ? total : 0;
   return {p, office, dfee, base, disc, total, now};
 }
 function checkout(){
@@ -194,20 +194,24 @@ function checkout(){
   : `<div class="field"><label for="region">Viloyat</label><select id="region"><option value="">— tanlang —</option>${REG.map(r=>`<option ${r===f.region?"selected":""}>${r}</option>`).join("")}</select></div>
    ${f.region?`<div class="field"><label for="city">Shahar / tuman</label><select id="city"><option value="">— tanlang —</option>${cities.map(x=>`<option ${x===f.city?"selected":""}>${esc(x)}</option>`).join("")}</select></div>`:""}
    ${f.city?`<div class="field"><label for="office">BTS filiali</label><select id="office"><option value="">— tanlang —</option>${offs.map(o=>`<option value="${o.code}" ${o.code===f.office?"selected":""}>${esc(o.name)} — ${esc(o.address)}</option>`).join("")}</select></div>`:""}
-   ${c.office?`<div class="msg" style="margin-top:0">🏢 <b>${esc(c.office.name)}</b> (${esc(c.office.code)})<br>${esc(c.office.address)}<br>🕒 ${esc(c.office.hours||"")}<br>🚚 ≈ ${so(c.dfee)} so'm · 1–3 kun · to'lov 100% oldindan</div>`:(S.offices?"":`<p style="color:var(--muted)">Filiallar yuklanmoqda…</p>`)}`}</div>
-  <div class="sect"><h3>Qabul qiluvchi</h3><div class="field"><label for="nm">Ism</label><input id="nm" value="${esc(f.name)}" autocomplete="name"></div><div class="field"><label for="ph">Telefon</label><input id="ph" inputmode="tel" value="${esc(f.phone)}" placeholder="+998 90 123 45 67" autocomplete="tel"></div></div>
-  <div class="sect"><h3>Hisob</h3><div class="sum"><span>Noutbuk</span><span>${so(c.base)} so'm</span><span>Yetkazish</span><span>${c.dfee?so(c.dfee)+" so'm":f.delivery==="pickup"?"bepul":"—"}</span>${c.disc?`<span>🎁 Taklif chegirmasi</span><span>−${so(c.disc)} so'm</span>`:""}<span class="t">Jami</span><span class="t">≈ ${so(c.total)} so'm</span>${f.delivery==="pickup"&&f.pay!=="full"?`<span>Hozir to'lov</span><span><b>${c.now?"≈ "+so(c.now)+" so'm":"yo'q"}</b></span>`:""}</div></div><div style="height:16px"></div>`;
+   ${c.office?`<div class="msg" style="margin-top:0">🏢 <b>${esc(c.office.name)}</b> (${esc(c.office.code)})<br>${esc(c.office.address)}<br>🕒 ${esc(c.office.hours||"")}<br>🚚 ≈ ${so(c.dfee)} so'm · 1–3 kun</div>`:(S.offices?"":`<p style="color:var(--muted)">Filiallar yuklanmoqda…</p>`)}
+   <h3 style="margin-top:12px">To'lov usuli</h3>
+   <button class="opt ${f.pay==="deposit"?"on":""}" data-pay="deposit"><b>🔒 Oldindan qisman — ${so(dep)} so'm</b><span>Noutbukni BTS'ga topshirib, chekini yuboramiz. BTS ilovasida qabul qilinganini tekshirgach, qolganini to'laysiz.</span></button>
+   <button class="opt ${f.pay==="full"?"on":""}" data-pay="full"><b>💳 Hozir to'liq to'lash</b><span>Barcha summani birdaniga o'tkazasiz.</span></button>`}
+   <button class="ghost" data-info style="width:100%;margin-top:4px">ℹ️ To'lov va yetkazish tartibi</button></div>
+  <div class="sect"><h3>Qabul qiluvchi</h3><button class="ghost" data-autofill style="width:100%;margin-bottom:10px">👤 Telegram profilimdan to'ldirish</button><div class="field"><label for="nm">Ism</label><input id="nm" value="${esc(f.name)}" autocomplete="name"></div><div class="field"><label for="ph">Telefon</label><input id="ph" inputmode="tel" value="${esc(f.phone)}" placeholder="+998 90 123 45 67" autocomplete="tel"></div></div>
+  <div class="sect"><h3>Hisob</h3><div class="sum"><span>Noutbuk</span><span>${so(c.base)} so'm</span><span>Yetkazish</span><span>${c.dfee?so(c.dfee)+" so'm":f.delivery==="pickup"?"bepul":"—"}</span>${c.disc?`<span>🎁 Taklif chegirmasi</span><span>−${so(c.disc)} so'm</span>`:""}<span class="t">Jami</span><span class="t">≈ ${so(c.total)} so'm</span>${f.pay!=="full"&&c.now!==c.total?`<span>Hozir to'lov</span><span><b>${c.now?"≈ "+so(c.now)+" so'm":"yo'q"}</b></span>`:""}</div></div><div style="height:16px"></div>`;
 }
 function ready(){ const f=S.form; return f.name.trim() && f.phone.replace(/\D/g,"").length>=9 && (f.delivery==="pickup" || f.office); }
 
 /* ---------- payment ---------- */
 function pay(){
   const o=S.order;
-  return `<div class="sect"><h3>Buyurtma #${o.number}</h3><p style="margin:0 0 10px">${o.mode==="deposit"?"Band qilish uchun":"Quyidagi"} kartaga <b>aynan</b> shu summani o'tkazing:</p><div class="amount">${so(o.pay_now)} so'm</div>
-   ${o.mode==="deposit"?`<p style="margin:4px 0 0;color:var(--muted);font-size:12.5px">Qolgan ${so(o.total-o.pay_now)} so'm — olib ketishda, ko'rib bo'lgach.</p>`:""}
-   <p style="margin:4px 0 12px;color:var(--muted);font-size:12.5px">Oxiridagi ${o.uniq} so'm — to'lovingizni tez topish uchun.</p>
+  return `<div class="sect"><h3>Buyurtma #${o.number}</h3><p style="margin:0 0 10px">${o.mode==="balance"?"Qolgan to'lovni":o.mode==="deposit"?"Oldindan to'lovni":"Quyidagi summani"} kartaga <b>aynan</b> shu summani o'tkazing:</p><div class="amount">${so(o.pay_now)} so'm</div>
+   ${o.mode==="deposit"?`<p style="margin:4px 0 0;color:var(--muted);font-size:12.5px">Qolgan ${so(o.total-o.pay_now)} so'm — ${o.delivery==="bts"?"BTS cheki kelgach, qabul qilinganini tekshirib":"olib ketishda, ko'rib bo'lgach"}.</p>`:""}
+   ${o.mode==="balance"?`<div style="height:8px"></div>`:`<p style="margin:4px 0 12px;color:var(--muted);font-size:12.5px">Oxiridagi ${o.uniq} so'm — to'lovingizni tez topish uchun.</p>`}
    ${o.card?`<div class="cardno"><div><small>Karta</small><b>${esc(o.card)}</b><small>${esc(o.holder||"")}</small></div><button data-copy="${esc(o.card.replace(/\s/g,""))}">Nusxalash</button></div>`:`<div class="msg">💳 Karta raqamini admin tez orada bot orqali yuboradi.</div>`}
-   <p style="margin:10px 0 0">⏳ Band qilingan: <b id="timer" style="color:var(--warn)">2:00:00</b></p></div>
+   ${o.mode==="balance"?"":`<p style="margin:10px 0 0">⏳ Band qilingan: <b id="timer" style="color:var(--warn)">2:00:00</b></p>`}<button class="ghost" data-info style="width:100%;margin-top:10px">ℹ️ To'lov tartibi</button></div>
   <div class="sect"><h3>To'lov cheki</h3>${S.receipt?`<div class="upload">${S.receipt.preview?`<img src="${S.receipt.preview}" alt="">`:"🧾"}<div>${esc(S.receipt.name)}</div></div>`:`<label class="upload" for="file">📎 Chek rasmini yoki PDF ni tanlang<input id="file" type="file" accept="image/*,application/pdf" hidden></label>`}
    ${o.sent?`<div class="status">🔎 <div><b>Chek yuborildi.</b><br>Admin to'lov tushganini tasdiqlashi bilan bot sizga xabar beradi.</div></div>`:""}</div><div style="height:16px"></div>`;
 }
@@ -227,6 +231,7 @@ function orders(){
      ${o.track_number?`<div class="cardno" style="padding:10px 12px;margin-bottom:8px"><div><small>BTS trek raqami</small><b style="font-size:15px">${esc(o.track_number)}</b></div><button data-copy="${esc(o.track_number)}">Nusxalash</button></div>`:""}
      ${dead?"":steps(o)}
      ${["await_pay","rejected"].includes(o.state)?`<button class="mainbtn" data-payorder="${o.id}" style="width:100%">💳 To'lov va chek</button>`:""}
+     ${o.paid_uzs>0&&o.total_uzs-o.paid_uzs>0&&["paid","shipped","delivered"].includes(o.state)&&o.delivery==="bts"?`<div class="msg">💳 Qolgan to'lov: <b>${so(o.total_uzs-o.paid_uzs)} so'm</b>${o.state==="paid"?"<br><small>BTS cheki kelgach to'laysiz.</small>":""}</div>${o.state!=="paid"?`<button class="mainbtn" data-paybal="${o.id}" style="width:100%">💳 Qolgan to'lovni yuborish</button>`:""}`:""}
      ${["await_pay","rejected","reserved"].includes(o.state)&&!(o.state==="reserved"&&o.paid_uzs>0)?`<button class="ghost bad" data-cancel="${o.id}" style="width:100%;margin-top:8px">❌ Bekor qilish</button>`:""}
      ${o.state==="reserved"&&o.delivery==="pickup"?`<p style="margin:8px 0 0;color:var(--muted);font-size:12.5px">Kelishdan oldin qo'ng'iroq qiling: ${esc(S.me?.pickup?.phone||"+998 50 570 55 79")}</p>`:""}
      ${["shipped","delivered","ready"].includes(o.state)?`<button class="mainbtn" data-received="${o.id}" style="width:100%;margin-top:8px">✅ Qabul qildim</button>`:""}
@@ -241,7 +246,8 @@ function ref(){
   return `<div class="hero"><div class="logo">🎁</div><div><b>Do'stingizni olib keling</b><small>Ikkalangiz ham pul yutasiz</small></div></div>
   <div class="sect"><dl class="kv"><dt>Do'stingiz</dt><dd><b>${so(r.bonus||100000)} so'm</b> chegirma — birinchi noutbukka</dd><dt>Siz</dt><dd><b>${so(r.reward||150000)} so'm</b> — har bir xarid qilgan do'st uchun, kartangizga</dd></dl></div>
   <div class="sect"><h3>Havolangiz</h3><div class="cardno"><div style="min-width:0"><small>Shaxsiy havola</small><b style="font-size:13px;letter-spacing:0;word-break:break-all">${esc(r.link||"…")}</b></div><button data-copy="${esc(r.link||"")}">Nusxalash</button></div>
-   <div class="row2" style="margin-top:10px"><button class="ghost" data-sharelink>📤 Do'stga yuborish</button></div>
+   <video src="assets/ref.mp4" poster="assets/ref.jpg" autoplay muted loop playsinline style="width:100%;border-radius:12px;margin-top:10px;display:block"></video>
+   <div class="row2" style="margin-top:10px"><button class="mainbtn" data-sharelink>📤 Taklifnomani yuborish</button></div>
    <div class="kpis" style="margin-top:10px;grid-template-columns:1fr 1fr"><div class="kpi"><b>${r.invited??0}</b><span>qo'shildi</span></div><div class="kpi"><b>${r.bought??0}</b><span>xarid qildi</span></div></div>
    <p style="color:var(--muted);font-size:12.5px">Mukofot do'stingiz noutbukni olib, 14 kun ichida qaytarmasa beriladi. Faqat botga birinchi marta kirgan yangi mijozlar hisoblanadi.</p></div>`;
 }
@@ -256,10 +262,10 @@ function aOrders(){
   const act = (o,k,t,cls="") => `<button class="ghost ${cls}" data-act="${k}:${o.id}">${t}</button>`;
   const active = d.orders.filter(o=>!["cancelled","expired","received"].includes(o.state)), done = d.orders.filter(o=>["cancelled","expired","received"].includes(o.state));
   const card = o => `<div class="ord"><b>#${esc(o.number)}</b>${o.is_test?" 🧪":""} · ${ST[o.state]||o.state} · ${o.channel==="app"?"ilova":"bot"}
-    <div style="color:var(--muted);font-size:12.5px;margin-top:2px">${esc(o.products?.model||"")}<br>👤 ${esc(o.name)} · <a href="tel:${esc(o.phone)}">${esc(o.phone)}</a> · ID ${o.user_id}<br>${o.delivery==="pickup"?"🏠 Olib ketish":"🚚 "+esc(o.bts_office||o.region)}<br>💳 ${PM[o.pay_mode]||""}: jami ${so(o.total_uzs)}${o.pay_mode==="deposit"?` · band ${so(o.deposit_uzs)}`:""} · to'langan ${so(o.paid_uzs)}${o.track_number?`<br>📦 Trek: ${esc(o.track_number)}`:""}${o.feedback?`<br>⭐ ${o.feedback.rating}/5 ${esc(o.feedback.text||"")}`:""}</div>
+    <div style="color:var(--muted);font-size:12.5px;margin-top:2px">${esc(o.products?.model||"")}<br>👤 ${esc(o.name)} · <a href="tel:${esc(o.phone)}">${esc(o.phone)}</a> · ID ${o.user_id}<br>${o.delivery==="pickup"?"🏠 Olib ketish":"🚚 "+esc(o.bts_office||o.region)}<br>💳 ${PM[o.pay_mode]||""}: jami ${so(o.total_uzs)}${o.pay_mode==="deposit"?` · band ${so(o.deposit_uzs)}`:""} · to'langan ${so(o.paid_uzs)}${o.due>0&&o.paid_uzs>0?` · <b style="color:var(--warn)">qoldiq ${so(o.due)}</b>`:""}${o.track_number?`<br>📦 Trek: ${esc(o.track_number)}`:""}${o.feedback?`<br>⭐ ${o.feedback.rating}/5 ${esc(o.feedback.text||"")}`:""}</div>
     ${o.track_photo_url?`<img src="${o.track_photo_url}" style="max-width:120px;border-radius:8px;margin-top:6px">`:""}
     <div class="acts">
-     ${o.state==="checking"?act(o,"pok","✅ To'lovni tasdiqlash","ok")+act(o,"pno","❌ Rad etish","bad"):""}
+     ${o.state==="checking"||(o.pending&&o.due>0)?act(o,"pok",o.state==="checking"?"✅ To'lovni tasdiqlash":"✅ Qolgan to'lovni tasdiqlash","ok")+act(o,"pno","❌ Rad etish","bad"):""}
      ${o.delivery==="pickup"&&["ready","reserved"].includes(o.state)?act(o,"aho","🤝 Topshirildi","ok"):""}
      ${o.state==="shipped"?act(o,"adl","📬 Yetkazildi"):""}
      ${["await_pay","reserved","checking","rejected"].includes(o.state)?act(o,"acn","❌ Bekor qilish","bad"):""}
@@ -304,8 +310,8 @@ function render(){
   const T=$("tabs"); T.hidden=["product","checkout","pay"].includes(s); T.style.setProperty("--n",tabs.length);
   T.innerHTML=tabs.map(([k,i,l])=>`<button data-tab="${k}" class="${S.tab===k?"on":""}"><b>${i}</b>${l}</button>`).join("");
   if (s==="product"){ const p=S.items.find(x=>x.sku===S.pid); if(p?.price) main(`🛒 Buyurtma berish · ${priceOf(p)}$`, startCheckout); else main(null); back(true, ()=>openTab(S.tab==="compare"?"compare":"home")); }
-  else if (s==="checkout"){ const c=calc(); main(S.form.delivery==="pickup"&&S.form.pay==="later" ? "🔒 3 soatga band qilish" : `💳 Buyurtma · ${so(c.now)} so'm`, placeOrder, !ready()); back(true, ()=>go("product")); }
-  else if (s==="pay"){ main(S.order.sent?"📦 Buyurtmalarim":(S.receipt?"✅ Chekni yuborish":"📎 Avval chekni tanlang"), S.order.sent?()=>openTab("orders"):sendReceipt, !S.order.sent&&!S.receipt); back(true, ()=>openTab("orders")); startTimer(); }
+  else if (s==="checkout"){ const c=calc(); main(S.form.delivery==="pickup"&&S.form.pay==="later" ? "🔒 3 soatga band qilish" : `💳 Buyurtma · hozir ${so(c.now)} so'm`, placeOrder, !ready()); back(true, ()=>go("product")); }
+  else if (s==="pay"){ main(S.order.sent?"📦 Buyurtmalarim":(S.receipt?"✅ Chekni yuborish":"📎 Avval chekni tanlang"), S.order.sent?()=>openTab("orders"):sendReceipt, !S.order.sent&&!S.receipt); back(true, ()=>openTab("orders")); if(S.order.mode!=="balance") startTimer(); }
   else { main(null); back(false); }
   const q=$("q"); if(q) q.addEventListener("input", e=>{ S.q=e.target.value; const pos=e.target.selectionStart; render(); const n=$("q"); n.focus(); n.setSelectionRange(pos,pos); });
   const st=$("strip"); if(st) st.addEventListener("scroll", ()=>{ const i=Math.round(st.scrollLeft/st.clientWidth)+1; const g=$("gn"); if(g) g.textContent=`${i}/${st.children.length}`; });
@@ -337,7 +343,7 @@ async function startCheckout(){
   const saved = JSON.parse((await CS.get("buyer")) || "null") || {};
   for (const k of ["name","phone","region","city","office"]) if (!S.form[k] && saved[k]) S.form[k] = saved[k];
   S.form.name = S.form.name || tg?.initDataUnsafe?.user?.first_name || "";
-  if (saved.office) S.form.delivery = "bts";
+  if (saved.office){ S.form.delivery = "bts"; S.form.pay = "deposit"; }
   go("checkout"); loadOffices();
 }
 async function placeOrder(){
@@ -348,7 +354,7 @@ async function placeOrder(){
     CS.set("buyer", JSON.stringify({name:f.name, phone:f.phone, region:f.region, city:f.city, office:f.office}));
     haptic("medium"); S.receipt=null; S.me.discount=0;
     if(!o.pay_now){ toast(`#${o.number}: 3 soatga band qilindi`); return openTab("orders"); }
-    S.order=o; go("pay");
+    S.order={...o, delivery:f.delivery}; go("pay");
   }catch(e){ toast(e.message); } finally { tg?.MainButton?.hideProgress(); }
 }
 async function sendReceipt(){
@@ -383,13 +389,23 @@ document.addEventListener("click", async e=>{
   if("sendoffer" in d) return sendOffer();
   if(d.accept){ await api("accept",{sku:S.pid, price:Number(d.accept)}); S.deals[S.pid]=Number(d.accept); S.offerMsg[S.pid]=`🤝 Kelishdik: <b>${d.accept}$</b>.`; return render(); }
   if("share" in d){ const url=`https://t.me/noutgo_robot?start=${S.pid}`; tg?.openTelegramLink?.(`https://t.me/share/url?url=${encodeURIComponent(url)}`); return; }
-  if("sharelink" in d){ tg?.openTelegramLink?.(`https://t.me/share/url?url=${encodeURIComponent(S.ref?.link||"")}&text=${encodeURIComponent(`noutgo'dan noutbuk oling — ${so(S.ref?.bonus||100000)} so'm chegirma bilan`)}`); return; }
+  if("sharelink" in d){ if(tg?.switchInlineQuery && tg.isVersionAtLeast?.("6.7")) return tg.switchInlineQuery("ref",["users","groups"]); tg?.openTelegramLink?.(`https://t.me/share/url?url=${encodeURIComponent(S.ref?.link||"")}&text=${encodeURIComponent(`noutgo'dan noutbuk oling — ${so(S.ref?.bonus||100000)} so'm chegirma bilan`)}`); return; }
   if(d.copy){ try{ await navigator.clipboard.writeText(d.copy); toast("Nusxalandi"); }catch(x){ toast(d.copy); } return; }
-  if(d.dl){ S.form.delivery=d.dl; if(d.dl==="bts") loadOffices(); return render(); }
+  if(d.dl){ S.form.delivery=d.dl; if(d.dl==="bts"){ loadOffices(); S.form.pay="deposit"; } else if(S.form.pay==="deposit") S.form.pay="full"; return render(); }
   if(d.pay){ S.form.pay=d.pay; haptic(); return render(); }
   if("map" in d){ const p=S.me.pickup; tg?.openLink?.(`https://maps.google.com/?q=${p.lat},${p.lng}`); return; }
   if("call" in d){ toast(S.me?.pickup?.phone||"+998 50 570 55 79"); try{ await navigator.clipboard.writeText((S.me?.pickup?.phone||"").replace(/\s/g,"")); }catch(x){} return; }
   if(d.payorder){ const o=S.orders.find(x=>String(x.id)===d.payorder); const now=o.pay_mode==="deposit"?o.deposit_uzs:o.total_uzs; S.order={id:o.id, number:o.number, total:o.total_uzs, pay_now:now, mode:o.pay_mode, uniq:now%100, card:S.card, holder:S.holder, reserved_until:new Date(o.reserved_until).getTime()}; S.receipt=null; return go("pay"); }
+  if(d.paybal){ const o=S.orders.find(x=>String(x.id)===d.paybal); const now=o.total_uzs-o.paid_uzs; S.order={id:o.id, number:o.number, total:o.total_uzs, pay_now:now, mode:"balance", delivery:o.delivery, uniq:now%100, card:S.card, holder:S.holder}; S.receipt=null; return go("pay"); }
+  if("info" in d){ tg?.openTelegramLink?.("https://t.me/noutgo_uz/1669"); return; }
+  if("autofill" in d){ const u=tg?.initDataUnsafe?.user||{}; S.form.name=[u.first_name,u.last_name].filter(Boolean).join(" ")||S.form.name;
+    const done=p=>{ if(p){ S.form.phone=p; S.me.user.phone=p; } render(); toast(p?"✅ Profil ma'lumotlari to'ldirildi":"Ism to'ldirildi — raqamni kiriting"); };
+    if(S.me?.user?.phone) return done(S.me.user.phone);
+    if(!tg?.requestContact) return done(null);
+    tg.requestContact(async (ok,res)=>{ if(!ok) return done(null); let p=res?.responseUnsafe?.contact?.phone_number;
+      for(let i=0;!p&&i<6;i++){ await new Promise(r=>setTimeout(r,1000)); try{ p=(await api("phone")).phone; }catch(x){} }
+      done(p?(String(p).startsWith("+")?p:"+"+p):null); });
+    return; }
   if(d.cancel){ if(!(await confirm("Buyurtmani bekor qilasizmi?"))) return; await api("cancel",{order_id:Number(d.cancel)}); toast("Bekor qilindi"); return reloadOrders(); }
   if(d.received){ await api("received",{order_id:Number(d.received)}); tg?.HapticFeedback?.notificationOccurred("success"); toast("Rahmat! Endi baholang 🙏"); return reloadOrders(); }
   if(d.star){ const [id,n]=d.star.split(":"); S.fb[id]={...(S.fb[id]||{}), rating:Number(n), text:$("fbt"+id)?.value||""}; return render(); }

@@ -69,7 +69,7 @@ async function sticker(chat: number, emoji: string) {
       for (const x of s.result?.stickers ?? []) if (x.emoji && !map[x.emoji]) map[x.emoji] = x.file_id;
       if (Object.keys(map).length) await setSetting("anim_stickers", JSON.stringify(map));
     }
-    const id = map[emoji] ?? map[emoji.replace("\ufe0f", "")];
+    const id = map[emoji] ?? map[emoji.replace("\ufe0f", "")] ?? map["🎉"];
     if (id) await tg("sendSticker", { chat_id: chat, sticker: id });
   } catch (e) { console.error("sticker", e); }
 }
