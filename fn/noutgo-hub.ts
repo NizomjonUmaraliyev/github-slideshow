@@ -73,6 +73,31 @@ async function sticker(chat: number, emoji: string) {
     if (id) await tg("sendSticker", { chat_id: chat, sticker: id });
   } catch (e) { console.error("sticker", e); }
 }
+// Per-key flood guard (Postgres, atomic). Fails open if the DB call errors.
+async function allow(key: string, limit: number, windowS = 60) {
+  const { data, error } = await db.rpc("rl_hit", { p_key: key, p_limit: limit, p_window_s: windowS });
+  return error ? true : data !== false;
+}
+const react = (chat: number, message_id: number, emoji: string) => tg("setMessageReaction", { chat_id: chat, message_id, reaction: [{ type: "emoji", emoji }] });
+const CUSTOMER_CMDS = [
+  { command: "start", description: "Bosh menyu" },
+  { command: "katalog", description: "Sotuvdagi noutbuklar" },
+  { command: "byudjet", description: "Narx oralig'i bo'yicha tanlash" },
+  { command: "solishtirish", description: "Ikki noutbukni solishtirish" },
+  { command: "dokon", description: "Do'kon ilovasini ochish" },
+  { command: "buyurtmalar", description: "Buyurtmalarim va holati" },
+  { command: "taklif", description: "Do'stni taklif qilish — pul mukofoti" },
+  { command: "savol", description: "Asosiy adminga savol yuborish" },
+  { command: "yordam", description: "Yordam va aloqa" },
+];
+const ADMIN_CMDS = [
+  { command: "admin", description: "🛠 Admin panel" }, { command: "orders", description: "🛠 Buyurtmalarni boshqarish" }, { command: "stats", description: "🛠 Statistika" },
+  { command: "testers", description: "🛠 Testerlar" }, { command: "card", description: "🛠 To'lov kartasi" }, { command: "status", description: "🛠 AI holati" },
+  { command: "on", description: "🛠 AI yoqish" }, { command: "off", description: "🛠 AI o'chirish" },
+];
+async function syncCommands(chatId: number, role: string) {
+  return tg("setMyCommands", { scope: { type: "chat", chat_id: chatId }, commands: role === "admin" ? [...CUSTOMER_CMDS, ...ADMIN_CMDS] : CUSTOMER_CMDS });
+}
 const due = (o: any) => Math.max(0, Number(o.total_uzs) - Number(o.paid_uzs ?? 0));
 const who = (c: any) => `${esc(c?.first_name ?? c?.name ?? "")}${c?.username ? " @" + esc(c.username) : ""}`;
 
@@ -228,6 +253,7 @@ async function bid(chat: number, from: any, sku: string, v: number) {
   if (p.floor_usd && v >= p.floor_usd) {
     if (s.rounds[sku] === 1) {
       const c = Math.min(p.price_usd, Math.ceil(((v + p.price_usd) / 2) / 5) * 5);
+      s.counters = s.counters ?? {}; s.counters[sku] = c;
       await setSession(uid, s); await db.from("offers").update({ decision: "countered", decided_by: "bot", final_usd: c }).eq("id", off!.id);
       return send(chat, `Taklifingiz uchun rahmat! ${v}$ ga bera olmaymiz, lekin siz uchun <b>${c}$</b> qilib berishimiz mumkin.`, { reply_markup: { inline_keyboard: [[{ text: `✅ ${c}$ ga roziman`, callback_data: `acc:${sku}:${c}`, style: "success" }], [{ text: "💬 Boshqa narx", callback_data: `off:${sku}` }, { text: "💻 Arzonroq", callback_data: `bud:0:${p.price_usd}` }]] } });
     }
@@ -565,9 +591,10 @@ async function onTesterMessage(m: any, t: Tester) {
   if (text === "❌ Bekor qilish") { s.step = null; s.cart = null; await setSession(from.id, s); return send(chat, "Bekor qilindi.", { reply_markup: mainKb(t.role === "admin") }); }
   // Admin answers a customer question (copied to the customer as the bot).
   if (t.role === "admin" && s.step?.t === "reply" && !text.startsWith("/") && !MENU.includes(text)) {
-    const to = s.step.to; s.step = null; await setSession(from.id, s);
-    await send(to, "💬 <b>noutgo admin javobi:</b>");
+    const to = s.step.to, qmsg = s.step.msg; s.step = null; await setSession(from.id, s);
+    await send(to, "💬 <b>noutgo admin javobi:</b>", qmsg ? { reply_parameters: { message_id: qmsg, allow_sending_without_reply: true } } : {});
     const r = await tg("copyMessage", { chat_id: to, from_chat_id: chat, message_id: m.message_id });
+    if (r.ok && qmsg) react(to, qmsg, "❤");
     return send(chat, r.ok ? "✅ Javob mijozga yuborildi." : "⚠️ Yuborilmadi: " + esc(r.description));
   }
   // Phone shared from the Mini App ("Telegram raqamimni olish") — save it quietly.
@@ -579,7 +606,8 @@ async function onTesterMessage(m: any, t: Tester) {
   if (s.step?.t === "ask" && !text.startsWith("/") && !MENU.includes(text)) {
     s.step = null; await setSession(from.id, s);
     const c = (await db.from("customers").select("phone").eq("user_id", from.id).maybeSingle()).data;
-    await send(ADMIN, `📩 <b>Mijozdan savol</b>\n${who(from)} · ID ${from.id}${c?.phone ? " · " + esc(c.phone) : ""}`, { reply_markup: { inline_keyboard: [[{ text: "↩️ Javob berish", callback_data: `arp:${from.id}`, style: "primary" }]] } });
+    react(chat, m.message_id, "👌");
+    await send(ADMIN, `📩 <b>Mijozdan savol</b>\n${who(from)} · ID ${from.id}${c?.phone ? " · " + esc(c.phone) : ""}`, { reply_markup: { inline_keyboard: [[{ text: "↩️ Javob berish", callback_data: `arp:${from.id}:${m.message_id}`, style: "primary" }]] } });
     await tg("copyMessage", { chat_id: ADMIN, from_chat_id: chat, message_id: m.message_id });
     return send(chat, "✅ <b>Xabaringiz asosiy adminga yuborildi.</b>\nJavob shu chatga keladi — odatda bir necha daqiqada.", { reply_markup: mainKb(t.role === "admin") });
   }
@@ -600,7 +628,7 @@ async function onTesterMessage(m: any, t: Tester) {
     return createOrder(chat, from, t);
   }
   if (s.step?.t === "offer" && /^\d{2,4}\s*\$?$/.test(text.trim())) return bid(chat, from, s.step.sku, parseInt(text, 10));
-  if (s.step?.t === "receipt" && (m.photo || m.document)) return onReceipt(chat, from, m, s.step.order);
+  if (s.step?.t === "receipt" && (m.photo || m.document)) { react(chat, m.message_id, "👀"); return onReceipt(chat, from, m, s.step.order); }
   if (s.step?.t === "feedback" && text && !text.startsWith("/")) {
     await db.from("feedback").update({ text: text.slice(0, 1500) }).eq("id", s.step.id);
     s.step = null; await setSession(from.id, s);
@@ -609,6 +637,7 @@ async function onTesterMessage(m: any, t: Tester) {
   }
   if (cmd === "/start") {
     await log("bot", "start", from.id, null, { param: arg });
+    syncCommands(chat, t.role).catch(() => {});
     if (arg.startsWith("ref_")) await applyReferral(from, arg.slice(4), isNew);
     await sticker(chat, "👋");
     await send(chat, `<b>Assalomu alaykum, ${esc(from.first_name)}!</b>\n\n<b>noutgo</b> — tekshirilgan premium b/u noutbuklar.\n✅ Original zaryadka  ·  🛡 2 hafta kafolat\n🚚 BTS — butun O'zbekiston  ·  🏠 Toshkentda olib ketish\n\n<i>🧪 Test rejimi — faqat testerlar ko'radi.</i>`, { reply_markup: mainKb(t.role === "admin") });
@@ -617,6 +646,14 @@ async function onTesterMessage(m: any, t: Tester) {
     return send(chat, "Nimadan boshlaymiz?", { reply_markup: { inline_keyboard: [[{ text: "💻 Katalogni ochish", callback_data: "cat", style: "success" }], ...(await appRow()), [{ text: "🔎 Byudjet bo'yicha", callback_data: "budget" }, { text: "🎁 Taklif dasturi", callback_data: "ref" }]] } });
   }
   if (t.role === "admin" && cmd.startsWith("/") && (await adminCommand(chat, cmd, arg))) return;
+  if (cmd === "/katalog") return showCatalog(chat);
+  if (cmd === "/byudjet") return budget(chat);
+  if (cmd === "/solishtirish") return compareMenu(chat, "");
+  if (cmd === "/buyurtmalar") return myOrders(chat, from.id);
+  if (cmd === "/taklif") return referral(chat, from);
+  if (cmd === "/dokon") { const row = await appRow("🛍 Do'konni ochish"); return send(chat, row.length ? "🛍 Do'kon ilovasi — barcha noutbuklar, solishtirish va buyurtma:" : "Ilova hozircha mavjud emas.", row.length ? { reply_markup: { inline_keyboard: row } } : {}); }
+  if (cmd === "/savol") { s.step = { t: "ask" }; await setSession(from.id, s); return send(chat, `✍️ <b>Savolingizni yozing</b> — matn, rasm yoki ovozli xabar.\nUni asosiy adminga yetkazaman.\n\n📞 Shoshilinch bo'lsa: ${PHONE}`, { reply_markup: { keyboard: [[{ text: "❌ Bekor qilish" }]], resize_keyboard: true, one_time_keyboard: true } }); }
+  if (cmd === "/yordam") return send(chat, `ℹ️ <b>noutgo bot — yordam</b>\n\n/katalog — sotuvdagi noutbuklar\n/byudjet — narx bo'yicha tanlash\n/solishtirish — ikki modelni solishtirish\n/dokon — do'kon ilovasi\n/buyurtmalar — buyurtmalarim va holati\n/taklif — do'stni taklif qilish, pul mukofoti\n/savol — asosiy adminga savol\n\n📞 ${PHONE} · @noutgo\nℹ️ <a href="${INFO_POST}">To'lov va yetkazish tartibi</a>`);
   if (text === "💻 Katalog") return showCatalog(chat);
   if (text === "🔎 Byudjet bo'yicha") return budget(chat);
   if (text === "📦 Buyurtmalarim") return myOrders(chat, from.id);
@@ -652,7 +689,10 @@ async function onCallback(q: any) {
     case "cmpw": return compare(chat, a, b);
     case "off": return askOffer(chat, from.id, a);
     case "bid": return bid(chat, from, a, Number(b));
-    case "acc": { const s = await session(from.id); s.deals = s.deals ?? {}; s.deals[a] = Number(b); await setSession(from.id, s); return send(chat, `🤝 Kelishdik — ${b}$! Narx 2 soat saqlanadi.`, { reply_markup: { inline_keyboard: [[{ text: "🛒 Buyurtma berish", callback_data: `ord:${a}`, style: "success" }]] } }); }
+    case "acc": {
+      const s = await session(from.id);
+      if (!s.counters || s.counters[a] !== Number(b)) return send(chat, "Bu taklif eskirgan. Narxni qaytadan taklif qiling 🙏", { reply_markup: { inline_keyboard: [[{ text: "💬 Narx taklif qilish", callback_data: `off:${a}` }]] } });
+      s.deals = s.deals ?? {}; s.deals[a] = Number(b); delete s.counters[a]; await setSession(from.id, s); return send(chat, `🤝 Kelishdik — ${b}$! Narx 2 soat saqlanadi.`, { reply_markup: { inline_keyboard: [[{ text: "🛒 Buyurtma berish", callback_data: `ord:${a}`, style: "success" }]] } }); }
     case "ord": return startOrder(chat, from, a);
     case "dl": {
       const s = await session(from.id); if (!s.cart) return send(chat, "Avval mahsulotni tanlang.", { reply_markup: { inline_keyboard: [[{ text: "💻 Katalog", callback_data: "cat" }]] } });
@@ -723,7 +763,7 @@ async function onCallback(q: any) {
   if (k === "a_stats") return stats(chat);
   if (k === "a_testers") return adminCommand(chat, "/testers", "");
   if (k === "aord") return adminOrderCard(chat, Number(a));
-  if (k === "arp") { const s = await session(from.id); s.step = { t: "reply", to: Number(a) }; await setSession(from.id, s); return send(chat, `↩️ Javobingizni yozing (matn, rasm yoki ovoz) — mijozga bot nomidan yuboriladi.`, { reply_markup: { keyboard: [[{ text: "❌ Bekor qilish" }]], resize_keyboard: true, one_time_keyboard: true } }); }
+  if (k === "arp") { const s = await session(from.id); s.step = { t: "reply", to: Number(a), msg: Number(b) || null }; await setSession(from.id, s); return send(chat, `↩️ Javobingizni yozing (matn, rasm yoki ovoz) — mijozga bot nomidan yuboriladi.`, { reply_markup: { keyboard: [[{ text: "❌ Bekor qilish" }]], resize_keyboard: true, one_time_keyboard: true } }); }
   if (k === "aok" || k === "ano") {
     const { data: off } = await db.from("offers").select("*,products(sku,model)").eq("id", Number(a)).maybeSingle(); if (!off) return;
     await clearKb();
@@ -841,11 +881,11 @@ Deno.serve(async (req) => {
     if (!tok || tok !== (await setting("selftest_token"))) return new Response("ok");
     if (url.searchParams.get("setup")) {
       const r = await tg("setWebhook", { url: HUB_URL, secret_token: await sha("hub:" + BOT), allowed_updates: ["message", "business_message", "business_connection", "callback_query", "inline_query", "channel_post", "chat_member", "message_reaction_count"] });
-      await tg("setMyCommands", { commands: [{ command: "start", description: "Boshlash" }] });
-      await tg("setMyCommands", { scope: { type: "chat", chat_id: ADMIN }, commands: [
-        { command: "admin", description: "Admin panel" }, { command: "orders", description: "Buyurtmalar" }, { command: "stats", description: "Statistika" }, { command: "testers", description: "Testerlar" },
-        { command: "card", description: "To'lov kartasi" }, { command: "status", description: "AI holati" }, { command: "on", description: "AI yoqish" }, { command: "off", description: "AI o'chirish" }] });
-      return Response.json(r);
+      // Public menu stays minimal while the shop is in test mode; testers get the full list.
+      await tg("setMyCommands", { commands: (await live()) ? CUSTOMER_CMDS : [{ command: "start", description: "Boshlash" }] });
+      const { data: ts } = await db.from("bot_testers").select("user_id,role").not("user_id", "is", null);
+      const cmds = await Promise.all((ts ?? []).map((x: any) => syncCommands(x.user_id, x.role)));
+      return Response.json({ webhook: r, commands: cmds.map((c: any) => c.ok) });
     }
     if (url.searchParams.get("rollback")) return Response.json(await tg("setWebhook", { url: OLD_URL, secret_token: await sha("noutgo:" + BOT), allowed_updates: ["message", "business_message", "business_connection"] }));
     if (url.searchParams.get("cron") === "report") { await dailyReport(); return new Response("sent"); }
@@ -866,12 +906,17 @@ Deno.serve(async (req) => {
   const task = (async () => {
     try {
       if (u.business_message || u.business_connection) {
-        if (u.business_message && u.business_message.from?.id !== ADMIN) await log("business", "message", u.business_message.from?.id);
+        const bm = u.business_message;
+        if (bm && bm.from?.id !== ADMIN) {
+          await log("business", "message", bm.from?.id);
+          if (!(await allow(`biz:${bm.chat?.id}`, 15, 60))) { console.warn("flood: business", bm.chat?.id); return; } // AI stays silent; you still see the chat
+        }
         return forward(u);
       }
       if (u.message) {
         const m = u.message, type = m.chat?.type;
         if (type === "private") {
+          if (m.from?.id !== ADMIN && !(await allow(`pm:${m.from?.id}`, 20, 60))) { console.warn("flood: private", m.from?.id); return; }
           const t = await tester(m.from);
           const text: string = m.text ?? "";
           const cmd = text.split(/\s+/)[0].split("@")[0];
@@ -880,12 +925,18 @@ Deno.serve(async (req) => {
           return onTesterMessage(m, t);
         }
         if (type === "group" || type === "supergroup") {
-          if (m.chat.id === GROUP && !m.is_automatic_forward && m.from?.id !== ADMIN && !m.sender_chat) await log("group", "comment", m.from?.id, null, { len: (m.text ?? "").length });
+          if (m.chat.id === GROUP && !m.is_automatic_forward && m.from?.id !== ADMIN && !m.sender_chat) {
+            await log("group", "comment", m.from?.id, null, { len: (m.text ?? "").length });
+            if (!(await allow(`grp:${m.from?.id}`, 6, 60))) { console.warn("flood: group", m.from?.id); return; }
+          }
           return forward(u);
         }
         return;
       }
-      if (u.callback_query) return onCallback(u.callback_query);
+      if (u.callback_query) {
+        if (u.callback_query.from?.id !== ADMIN && !(await allow(`cb:${u.callback_query.from?.id}`, 40, 60))) return tg("answerCallbackQuery", { callback_query_id: u.callback_query.id, text: "Biroz kuting 🙏" });
+        return onCallback(u.callback_query);
+      }
       if (u.inline_query) return onInline(u.inline_query);
       if (u.channel_post) return onChannelPost(u.channel_post);
       if (u.chat_member) return onChatMember(u.chat_member);

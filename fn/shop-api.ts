@@ -56,7 +56,7 @@ const imgSig = async (f: string) => hex(await hmac(enc.encode(BOT), "img:" + f))
 const imgUrl = async (f: string) => `${SUPA}/functions/v1/shop-api?a=img&f=${encodeURIComponent(f)}&s=${await imgSig(f)}`;
 async function view(p: any) {
   const photos = (p.photo_urls ?? []).length ? p.photo_urls : await Promise.all((p.photo_ids ?? []).map(imgUrl));
-  return { sku: p.sku, model: p.model, category: p.category, price: p.price_usd, price_text: p.price, cpu: p.cpu, ram: p.ram_gb, ssd: p.ssd, screen: p.screen, gpu: p.gpu, color: p.color, battery: p.battery_pct, battery_hours: p.battery_hours, cond: p.cond_score, defects: p.defects, description: p.description, photos, has_video: !!p.video_id };
+  return { thumbs: (p.photo_thumbs ?? []).length === photos.length ? p.photo_thumbs : photos, sku: p.sku, model: p.model, category: p.category, price: p.price_usd, price_text: p.price, cpu: p.cpu, ram: p.ram_gb, ssd: p.ssd, screen: p.screen, gpu: p.gpu, color: p.color, battery: p.battery_pct, battery_hours: p.battery_hours, cond: p.cond_score, defects: p.defects, description: p.description, photos, has_video: !!p.video_id };
 }
 async function friendDiscount(uid: number) {
   const { data: r } = await db.from("referrals").select("id").eq("friend_id", uid).eq("state", "joined").maybeSingle();
@@ -122,6 +122,7 @@ async function receipt(u: any, b: any) {
   const { data: o } = await db.from("orders").select("*").eq("id", b.order_id).eq("user_id", u.id).maybeSingle();
   const balance = !!o && Number(o.paid_uzs) > 0 && due(o) > 0 && ["paid", "reserved", "ready", "shipped", "delivered"].includes(o.state);
   if (!o || !(["await_pay", "rejected"].includes(o.state) || balance)) return { error: "Bu buyurtma uchun chek kutilmayapti" };
+  if (typeof b.data !== "string" || b.data.length > 11e6) return { error: "Fayl juda katta (8 MB gacha)" };
   const bin = decode(b.data);
   if (bin.length > 8e6) return { error: "Fayl juda katta" };
   const expect = balance ? due(o) : o.pay_mode === "deposit" ? Number(o.deposit_uzs) : Number(o.total_uzs);
@@ -183,7 +184,7 @@ async function offer(u: any, b: any) {
   const save = () => db.from("customers").update({ session: s }).eq("user_id", u.id);
   if (v >= p.price_usd) { s.deals[b.sku] = p.price_usd; await save(); return { result: "accepted", price: p.price_usd }; }
   if (p.floor_usd && v >= p.floor_usd) {
-    if (s.rounds[b.sku] === 1) { const cp = Math.min(p.price_usd, Math.ceil((v + p.price_usd) / 2 / 5) * 5); await save(); return { result: "counter", price: cp }; }
+    if (s.rounds[b.sku] === 1) { const cp = Math.min(p.price_usd, Math.ceil((v + p.price_usd) / 2 / 5) * 5); s.counters = s.counters ?? {}; s.counters[b.sku] = cp; await save(); return { result: "counter", price: cp }; }
     s.deals[b.sku] = v; await save(); return { result: "accepted", price: v };
   }
   await save();
@@ -193,9 +194,12 @@ async function offer(u: any, b: any) {
 }
 async function accept(u: any, b: any) { // customer accepts a counter-offer
   const { data: c } = await db.from("customers").select("session").eq("user_id", u.id).maybeSingle();
-  const s = c?.session ?? {}; s.deals = s.deals ?? {}; s.deals[b.sku] = Number(b.price);
+  const s = c?.session ?? {};
+  // Only a price the shop itself offered can be accepted (never trust the client).
+  if (!s.counters || s.counters[b.sku] !== Number(b.price)) return { error: "Bu taklif eskirgan — narxni qaytadan taklif qiling" };
+  s.deals = s.deals ?? {}; s.deals[b.sku] = s.counters[b.sku]; delete s.counters[b.sku];
   await db.from("customers").update({ session: s }).eq("user_id", u.id);
-  return { ok: true };
+  return { ok: true, price: s.deals[b.sku] };
 }
 async function referral(u: any) {
   await touch(u);
@@ -321,6 +325,13 @@ Deno.serve(async (req) => {
   const body = req.method === "POST" ? await req.json().catch(() => ({})) : {};
   const adminOnly = () => json({ error: "admin only" }, 403);
   try {
+    // Flood guard for actions that cost money (AI receipt check) or notify the admin. Admin is exempt.
+    const LIMITS: Record<string, [number, number]> = { receipt: [5, 600], order: [6, 3600], offer: [10, 600], feedback: [5, 600], received: [10, 600], cancel: [10, 600], accept: [20, 600], a_track: [30, 600] };
+    if (LIMITS[a ?? ""] && r !== "admin") {
+      const [lim, win] = LIMITS[a!];
+      const { data: okRl, error: rlErr } = await db.rpc("rl_hit", { p_key: `app:${a}:${user.id}`, p_limit: lim, p_window_s: win });
+      if (!rlErr && okRl === false) return json({ error: "Juda ko'p urinish. Birozdan so'ng qayta urinib ko'ring." }, 429);
+    }
     switch (a) {
       case "me": {
         await touch(user); await log("open", user.id, null, { start: body.start ?? null });
