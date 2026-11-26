@@ -399,7 +399,7 @@ function aStats(){
 }
 
 /* ---------- render ---------- */
-function render(){
+function render(){ if(!render._ready){ render._ready=1; requestAnimationFrame(()=>{ try{ tg?.ready?.(); }catch(x){} }); }
   const s=S.screen;
   const app=$("app"); app.classList.remove("enter"); void app.offsetWidth; if(render._last!==s) app.classList.add("enter"); render._last=s;
   $("app").innerHTML = s==="home"?home(): s==="product"?product(): s==="compare"?compare(): s==="checkout"?checkout(): s==="pay"?pay(): s==="orders"?orders(): s==="ref"?ref(): dash();
@@ -541,7 +541,7 @@ document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) refresh
 try{ tg?.onEvent?.("activated", refresh); }catch(x){}
 (async function start(){
   if(!tg?.initData){ $("app").innerHTML=`<div class="closed"><h2>noutgo</h2><p>Bu ilova Telegram ichida ochiladi: <b>@noutgo_robot</b></p></div>`; return; }
-  tg.ready(); tg.expand();
+  tg.expand(); setTimeout(()=>{ try{ tg.ready(); }catch(x){} }, 1500); // safety net; normally called after first paint
   try{ tg.setHeaderColor("#000000"); tg.setBackgroundColor("secondary_bg_color"); if(tg.isVersionAtLeast("7.10")) tg.setBottomBarColor("bg_color"); }catch(e){}
   try{ if(tg.isVersionAtLeast("7.7")) tg.disableVerticalSwipes(); }catch(e){}
   // Modern launch: full screen on phones (Bot API 8.0) with Telegram's own controls overlaid; portrait only.
