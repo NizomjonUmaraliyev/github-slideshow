@@ -117,7 +117,6 @@ button:active,.card:active{transform:scale(.97)}
 .sheet{animation:up .25s cubic-bezier(.2,.7,.2,1) both}.sheet-bg{animation:fade .2s ease both}
 .menu button{display:flex;width:100%;gap:10px;align-items:center;border:0;background:none;color:var(--fg);font:inherit;padding:12px 4px;border-bottom:1px solid var(--line);text-align:left}.menu button:last-child{border:0}
 .card{content-visibility:auto;contain-intrinsic-size:auto 250px}
-::view-transition-old(root),::view-transition-new(root){animation-duration:.18s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -425,7 +424,7 @@ function render(){ if(!render._ready){ render._ready=1; requestAnimationFrame(()
   const fl=$("file"); if(fl) fl.addEventListener("change", e=>{ const f=e.target.files[0]; if(!f) return; if(f.size>8e6) return toast("Fayl juda katta"); const r=new FileReader(); r.onload=()=>{ S.receipt={name:f.name, mime:f.type||"image/jpeg", data:String(r.result).split(",")[1], preview:f.type.startsWith("image/")?r.result:null}; render(); }; r.readAsDataURL(f); });
   document.querySelectorAll("[data-trackfile]").forEach(el=>el.addEventListener("change", e=>{ const id=el.dataset.trackfile, f=e.target.files[0]; if(!f) return; if(f.size>8e6) return toast("Fayl juda katta"); const r=new FileReader(); r.onload=()=>{ S.tfile=S.tfile||{}; S.tfile[id]={mime:f.type||"image/jpeg", data:String(r.result).split(",")[1]}; const l=$("tpl"+id); if(l) l.firstChild.textContent="✅ "+f.name; }; r.readAsDataURL(f); }));
 }
-function go(s){ const run=()=>{ S.screen=s; render(); window.scrollTo(0,0); }; if(document.startViewTransition && !matchMedia("(prefers-reduced-motion:reduce)").matches) document.startViewTransition(run); else run(); }
+function go(s){ S.screen=s; render(); window.scrollTo(0,0); }
 async function openTab(t){ S.tab=t; S.screen=t; render(); window.scrollTo(0,0);
   try{
     if(t==="orders"){ const j=await api("orders"); S.orders=j.orders; S.card=j.card; S.holder=j.holder; }
@@ -543,9 +542,9 @@ try{ tg?.onEvent?.("activated", refresh); }catch(x){}
   if(!tg?.initData){ $("app").innerHTML=`<div class="closed"><h2>noutgo</h2><p>Bu ilova Telegram ichida ochiladi: <b>@noutgo_robot</b></p></div>`; return; }
   tg.expand(); setTimeout(()=>{ try{ tg.ready(); }catch(x){} }, 1500); // safety net; normally called after first paint
   try{ tg.setHeaderColor("#000000"); tg.setBackgroundColor("secondary_bg_color"); if(tg.isVersionAtLeast("7.10")) tg.setBottomBarColor("bg_color"); }catch(e){}
-  try{ if(tg.isVersionAtLeast("7.7")) tg.disableVerticalSwipes(); }catch(e){}
-  // Modern launch: full screen on phones (Bot API 8.0) with Telegram's own controls overlaid; portrait only.
-  try{ if(tg.isVersionAtLeast("8.0") && ["ios","android"].includes(tg.platform)){ if(!tg.isFullscreen) tg.requestFullscreen(); tg.lockOrientation(); } }catch(e){}
+  try{ if(tg.isVersionAtLeast("7.7")) tg.enableVerticalSwipes(); }catch(e){} // swipe down to close stays on
+  // Normal (non-fullscreen) launch on every device; rotation follows the phone.
+  try{ if(tg.isVersionAtLeast("8.0")){ if(tg.isFullscreen) tg.exitFullscreen(); tg.unlockOrientation(); } }catch(e){}
   try{ const paint=()=>{ try{ tg.setHeaderColor("bg_color"); tg.setBackgroundColor("secondary_bg_color"); if(tg.isVersionAtLeast("7.10")) tg.setBottomBarColor("bg_color"); }catch(x){} };
        tg.onEvent("themeChanged", ()=>{ paint(); render(); }); tg.onEvent("fullscreenChanged", render); tg.onEvent("safeAreaChanged", render); tg.onEvent("contentSafeAreaChanged", render); }catch(e){}
   try{ if(tg.isVersionAtLeast("7.0")){ tg.SettingsButton.onClick(menuSheet); tg.SettingsButton.show(); } }catch(e){}
