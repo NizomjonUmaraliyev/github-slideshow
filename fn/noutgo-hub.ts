@@ -107,10 +107,14 @@ async function tester(from: any): Promise<Tester | null> {
   if (!from) return null;
   let { data } = await db.from("bot_testers").select("user_id,username,role").eq("user_id", from.id).maybeSingle();
   if (!data && from.username) {
-    const r = await db.from("bot_testers").select("id,user_id,username,role").ilike("username", from.username).maybeSingle();
-    if (r.data) { await db.from("bot_testers").update({ user_id: from.id }).eq("id", (r.data as any).id); data = { ...r.data, user_id: from.id } as any; }
+    // Username only claims an invite that has no Telegram ID yet — a re-registered username can't take over an existing tester.
+    const r = await db.from("bot_testers").select("id,user_id,username,role").ilike("username", from.username).is("user_id", null).maybeSingle();
+    if (r.data) { await db.from("bot_testers").update({ user_id: from.id }).eq("id", (r.data as any).id).is("user_id", null); data = { ...r.data, user_id: from.id } as any; }
   }
-  return data ? { user_id: from.id, role: (data as any).role } : null;
+  if (!data) return null;
+  // Admin rights are bound to the owner's fixed Telegram ID, never to a table row alone.
+  const role = (data as any).role === "admin" && from.id !== ADMIN ? "tester" : (data as any).role;
+  return { user_id: from.id, role };
 }
 async function customer(from: any): Promise<{ row: any; isNew: boolean }> {
   const { data } = await db.from("customers").select("*").eq("user_id", from.id).maybeSingle();

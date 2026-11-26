@@ -38,8 +38,9 @@ async function verify(initData: string) {
 }
 async function role(user: any) {
   let { data } = await db.from("bot_testers").select("id,role,user_id").eq("user_id", user.id).maybeSingle();
-  if (!data && user.username) { const r = await db.from("bot_testers").select("id,role,user_id").ilike("username", user.username).maybeSingle(); if (r.data) { await db.from("bot_testers").update({ user_id: user.id }).eq("id", r.data.id); data = r.data; } }
-  return data?.role ?? null;
+  if (!data && user.username) { const r = await db.from("bot_testers").select("id,role,user_id").ilike("username", user.username).is("user_id", null).maybeSingle(); if (r.data) { await db.from("bot_testers").update({ user_id: user.id }).eq("id", r.data.id).is("user_id", null); data = r.data; } }
+  if (!data) return null;
+  return data.role === "admin" && user.id !== ADMIN ? "tester" : data.role;
 }
 async function touch(u: any) {
   const { data } = await db.from("customers").select("user_id").eq("user_id", u.id).maybeSingle();
