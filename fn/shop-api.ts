@@ -32,7 +32,10 @@ async function verify(initData: string) {
   const p = new URLSearchParams(initData); const hash = p.get("hash"); if (!hash) return null; p.delete("hash");
   const dcs = [...p.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([k, v]) => `${k}=${v}`).join("\n");
   const secret = await hmac(enc.encode("WebAppData"), BOT);
-  if (hex(await hmac(secret, dcs)) !== hash) return null;
+  const calc = hex(await hmac(secret, dcs));
+  let diff = calc.length ^ hash.length; // constant-time compare
+  for (let i = 0; i < calc.length; i++) diff |= calc.charCodeAt(i) ^ (hash.charCodeAt(i) || 0);
+  if (diff) return null;
   if (Date.now() / 1000 - Number(p.get("auth_date") ?? 0) > 86400) return null;
   return JSON.parse(p.get("user") ?? "null");
 }
@@ -281,6 +284,7 @@ async function adminTrack(adminUser: any, b: any) {
 }
 async function adminNote(b: any) { await db.from("orders").update({ admin_note: String(b.note ?? "").slice(0, 500) }).eq("id", b.order_id); return { ok: true }; }
 
+let refcardCache: { jpg: Uint8Array; at: number } | null = null;
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: CORS });
   const url = new URL(req.url), a = url.searchParams.get("a");
@@ -307,13 +311,16 @@ Deno.serve(async (req) => {
     return new Response(bin, { headers: { "content-type": png ? "image/png" : "image/jpeg", "cache-control": "public, max-age=86400", ...CORS } });
   }
   if (a === "refcard") {
+    // Rendered once per worker and reused — this public endpoint must stay cheap.
+    if (refcardCache && Date.now() - refcardCache.at < 6 * 3600e3) return new Response(refcardCache.jpg, { headers: { "content-type": "image/jpeg", "cache-control": "public, max-age=86400", ...CORS } });
     const [bg, lg] = await Promise.all([
       fetch("https://nizomjonumaraliyev.github.io/github-slideshow/assets/ref-bg.png").then((r) => r.arrayBuffer()),
       db.from("branding_assets").select("b64").eq("name", "original").maybeSingle(),
     ]);
     const card = await Image.decode(new Uint8Array(bg));
     if (lg.data) { const logo = (await Image.decode(decode(lg.data.b64))).resize(120, 120).roundCorners(28); card.composite(logo, 52, 52); }
-    return new Response(await card.encodeJPEG(88), { headers: { "content-type": "image/jpeg", "cache-control": "public, max-age=86400", ...CORS } });
+    refcardCache = { jpg: await card.encodeJPEG(88), at: Date.now() };
+    return new Response(refcardCache.jpg, { headers: { "content-type": "image/jpeg", "cache-control": "public, max-age=86400", ...CORS } });
   }
   if (a === "offices") { // public BTS office list (no personal data)
     const { data } = await db.from("bts_offices").select("code,region,city,name,address,hours").order("region").order("city").order("code");
