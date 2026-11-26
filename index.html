@@ -220,12 +220,12 @@ function home(){
   ${S.me && !S.me.live ? `<div class="test">🧪 Test rejimi — faqat testerlar ko'radi</div>`:""}
   ${S.me?.discount ? `<div class="promo">🎁 Birinchi noutbukingizga <b>${so(S.me.discount)} so'm</b> chegirma — avtomatik.</div>`:""}
   <div class="chips">${F.map(([k,t])=>`<button class="chip ${S.filter===k?"on":""}" data-filter="${k}">${t}</button>`).join("")}</div>
-  ${list.length ? `<div class="grid">${list.map(p=>`<button class="card" data-open="${p.sku}">${p.photos[0]?`<img class="ph" loading="lazy" src="${p.photos[0]}" alt="">`:`<div class="ph ph0">${p.category==="laptop"?"💻":"🔌"}</div>`}<div class="cb"><span class="nm">${esc(short(p.model))}</span><span class="sp">${p.ram?`${p.ram}GB · ${esc(p.ssd||"")}`:esc(p.screen||"")}</span>${p.battery?`<span class="pill">🔋 ${p.battery}%</span>`:""}${p.defects?`<span class="pill w">⚠️ kamchilik bor</span>`:""}<span class="pr">${p.price?priceOf(p)+"$":esc(p.price_text)} ${dot(p)}</span></div></button>`).join("")}</div>` : `<div class="empty">${stk("🔍")}Bu oraliqda hozir noutbuk yo'q.</div>`}`;
+  ${list.length ? `<div class="grid">${list.map((p,i)=>`<button class="card" data-open="${p.sku}">${p.photos[0]?`<img class="ph" ${i<2?'fetchpriority="high"':'loading="lazy"'} decoding="async" width="480" height="360" src="${(p.thumbs||p.photos)[0]}" alt="">`:`<div class="ph ph0">${p.category==="laptop"?"💻":"🔌"}</div>`}<div class="cb"><span class="nm">${esc(short(p.model))}</span><span class="sp">${p.ram?`${p.ram}GB · ${esc(p.ssd||"")}`:esc(p.screen||"")}</span>${p.battery?`<span class="pill">🔋 ${p.battery}%</span>`:""}${p.defects?`<span class="pill w">⚠️ kamchilik bor</span>`:""}<span class="pr">${p.price?priceOf(p)+"$":esc(p.price_text)} ${dot(p)}</span></div></button>`).join("")}</div>` : `<div class="empty">${stk("🔍")}Bu oraliqda hozir noutbuk yo'q.</div>`}`;
 }
 function product(){
   const p = S.items.find(x=>x.sku===S.pid); if (!p) return `<div class="empty">Topilmadi</div>`;
   const deal = S.deals[p.sku], m = S.offerMsg[p.sku];
-  return `<div class="gal"><div class="strip" id="strip">${p.photos.map(u=>`<img src="${u}" alt="">`).join("")}</div>${p.photos.length>1?`<span class="n" id="gn">1/${p.photos.length}</span>`:""}</div>
+  return `<div class="gal"><div class="strip" id="strip">${p.photos.map((u,i)=>`<img ${i?'loading="lazy"':'fetchpriority="high"'} decoding="async" src="${u}" style="background:#111 url(${(p.thumbs||[])[i]||""}) center/cover" alt="">`).join("")}</div>${p.photos.length>1?`<span class="n" id="gn">1/${p.photos.length}</span>`:""}</div>
   <div class="sect"><h2>${esc(p.model)}</h2>${p.price?`<div class="price">${priceOf(p)}$ <small>≈ ${so(priceOf(p)*(S.me?.rate||12000))} so'm</small></div>`:`<div class="price">${esc(p.price_text)}</div>`}
    ${deal?`<div class="pill" style="margin-top:6px">🤝 Siz uchun kelishilgan narx (ro'yxatda ${p.price}$)</div>`:""}
    ${p.price?`<div class="row2" style="margin-top:10px">${!(tg?.SecondaryButton&&tg.isVersionAtLeast?.("7.10"))?`<button class="ghost" data-offer>💬 Narx taklifi</button>`:""}${p.category==="laptop"?`<button class="ghost" data-cmpwith="${p.sku}">⚖️ Solishtirish</button>`:""}<button class="ghost" data-share title="Ulashish">📤</button>${tg?.shareToStory&&tg.isVersionAtLeast?.("7.8")&&p.photos?.[0]?`<button class="ghost" data-story title="Storiga">📲</button>`:""}</div>`:""}${m?`<div class="msg">${m}</div>`:""}</div>
@@ -247,7 +247,7 @@ function compare(){
   const row = (k, x, y, nx, ny, lowWins) => { const bx = nx!=null&&ny!=null&&nx!==ny&&(lowWins?nx<ny:nx>ny), by = nx!=null&&ny!=null&&nx!==ny&&!bx; return `<tr><th>${k}</th><td class="${bx?"better":""}">${esc(x??"—")}</td><td class="${by?"better":""}">${esc(y??"—")}</td></tr>`; };
   return `<div class="sect" style="display:flex;align-items:center;gap:10px"><div style="flex:1"><h2>⚖️ Solishtirish</h2><p style="margin:0;color:var(--muted)">Ikki noutbukni tanlang — yaxshiroq qiymat yashil rangda.</p></div><span style="--s:52px" class="stk-wrap">${stk("🧐")}</span></div>
   <div class="sect"><div class="row2"><div class="field" style="flex:1;min-width:0">${sel(0)}</div><div class="field" style="flex:1;min-width:0">${sel(1)}</div></div>
-  <div class="row2" style="margin-bottom:10px">${[a,b].map(p=>p.photos[0]?`<img src="${p.photos[0]}" style="flex:1;min-width:0;aspect-ratio:4/3;object-fit:cover;border-radius:10px">`:`<div style="flex:1"></div>`).join("")}</div>
+  <div class="row2" style="margin-bottom:10px">${[a,b].map(p=>p.photos[0]?`<img decoding="async" src="${(p.thumbs||p.photos)[0]}" style="flex:1;min-width:0;aspect-ratio:4/3;object-fit:cover;border-radius:10px">`:`<div style="flex:1"></div>`).join("")}</div>
   <table class="t cmp">
    ${row("Narx", priceOf(a)+"$", priceOf(b)+"$", priceOf(a), priceOf(b), true)}
    ${row("Protsessor", a.cpu, b.cpu)}
@@ -556,7 +556,7 @@ try{ tg?.onEvent?.("activated", refresh); }catch(x){}
     const fresh = await api("boot",{start:sp});
     S.me=fresh.me; S.items=fresh.items; S.deals=fresh.deals||{};
     try{ localStorage.setItem("ng_boot", JSON.stringify(fresh)); }catch(x){}
-    S.items.forEach(p=>{ if(p.photos?.[0]) (new Image()).src=p.photos[0]; });
+    S.items.slice(0,4).forEach(p=>{ const u=(p.thumbs||p.photos||[])[0]; if(u) (new Image()).src=u; });
     try{ if(tg.isVersionAtLeast?.("8.0")){ tg.checkHomeScreenStatus(s=>{ S.home=s; if(S.screen==="home") render(); }); tg.onEvent("homeScreenAdded",()=>{ S.home="added"; toast("✅ Bosh ekranga qo'shildi"); render(); }); } }catch(x){}
     if(location.hash==="#admin" && S.me.role==="admin") return openTab("dash");
     const sku = sp.split("_")[0].toUpperCase();
